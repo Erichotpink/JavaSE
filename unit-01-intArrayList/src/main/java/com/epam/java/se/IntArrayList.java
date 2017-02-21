@@ -64,7 +64,49 @@ public class IntArrayList {
     }
 
     public void sort() {
+        if (data.length < 2) {
+            return;
+        }
 
+        int[] aux = Arrays.copyOf(data, data.length);
+        merge(data, 0, data.length, aux);
+    }
+
+    private void merge(int[] data, int startInclusive, int endExclusive, int[] aux) {
+
+        if (endExclusive <= startInclusive) {
+            return;
+        }
+
+        int mid = startInclusive + (endExclusive - startInclusive) / 2;
+
+        merge(data, startInclusive, mid, aux);
+        merge(data, mid, endExclusive, aux);
+
+        merger(data, startInclusive, mid, endExclusive, aux);
+    }
+
+    private void merger(int[] data, int startInclusive, int mid, int endExclusive, int[] aux) {
+
+        int i = startInclusive;
+        int j = mid;
+
+        for (int k = startInclusive; k < endExclusive; k++) {
+            if (i >= mid) {
+                data[k] = aux[j];
+                j++;
+            } else if (j >= endExclusive) {
+                data[k] = aux[i];
+                i++;
+            } else if (aux[i] <= aux[j]) {
+                data[k] = aux[i];
+                i++;
+            } else {
+                data[k] = aux[j];
+                j++;
+            }
+        }
+        System.arraycopy(data, startInclusive, aux, startInclusive, endExclusive-startInclusive);
     }
 
 
