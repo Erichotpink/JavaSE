@@ -39,7 +39,7 @@ public class IntArrayList {
         return size;
     }
 
-    private int maxValueInefficient() {
+    public int maxValueInefficient() {
         if(size == 0) {
             throw new NoSuchElementException();
         }
@@ -64,49 +64,48 @@ public class IntArrayList {
     }
 
     public void sort() {
-        if (data.length < 2) {
-            return;
-        }
-
-        int[] aux = Arrays.copyOf(data, data.length);
-        merge(data, 0, data.length, aux);
+        mergeSort(data, 0, getSize(), new int[getSize()]);
     }
 
-    private void merge(int[] data, int startInclusive, int endExclusive, int[] aux) {
+    /**
+     * Expects collection to be sorted.
+     *
+     * @param value value to find in collection
+     * @return index of the value or -indexToInsert - 1
+     */
+    public int binarySearch(int value) {
+        throw new UnsupportedOperationException();
+    }
 
-        if (endExclusive <= startInclusive) {
+    private void mergeSort(int[] data, int startInclusive, int endExclusive, int[] aux) {
+
+        final int length = endExclusive - startInclusive;
+
+        if (length <= 1) {
             return;
         }
 
-        int mid = startInclusive + (endExclusive - startInclusive) / 2;
+        final int mid = startInclusive + length / 2;
 
-        merge(data, startInclusive, mid, aux);
-        merge(data, mid, endExclusive, aux);
+        mergeSort(data, startInclusive, mid, aux);
+        mergeSort(data, mid, endExclusive, aux);
 
         merger(data, startInclusive, mid, endExclusive, aux);
     }
 
     private void merger(int[] data, int startInclusive, int mid, int endExclusive, int[] aux) {
 
+        System.arraycopy(data, startInclusive, aux, startInclusive, endExclusive-startInclusive);
+
         int i = startInclusive;
         int j = mid;
 
         for (int k = startInclusive; k < endExclusive; k++) {
-            if (i >= mid) {
-                data[k] = aux[j];
-                j++;
-            } else if (j >= endExclusive) {
-                data[k] = aux[i];
-                i++;
-            } else if (aux[i] <= aux[j]) {
-                data[k] = aux[i];
-                i++;
-            } else {
-                data[k] = aux[j];
-                j++;
-            }
+            if (i >= mid) data[k] = aux[j++];
+            else if (j >= endExclusive) data[k] = aux[i++];
+            else if (aux[i] < aux[j]) data[k] = aux[i++];
+            else data[k] = aux[j++];
         }
-        System.arraycopy(data, startInclusive, aux, startInclusive, endExclusive-startInclusive);
     }
 
 
