@@ -78,16 +78,30 @@ public class IntArrayList {
     }
 
     private int binarySearchRecursive(int startInclusive, int endExclusive, int value) {
-        final int length = endExclusive - startInclusive;
-        final int mid = startInclusive + length / 2;
 
         if (endExclusive <= startInclusive) return (-startInclusive - 1);
-        else if (value == data[mid]) return mid;
-        else if (value > data[mid]) return binarySearchRecursive(mid + 1, endExclusive, value);
-        else if (value < data[mid]) return binarySearchRecursive(startInclusive, mid, value);
 
-        return Integer.MIN_VALUE;
+        final int mid = startInclusive + (endExclusive - startInclusive) / 2;
+
+        if (value == data[mid]) return mid;
+
+        return (value > data[mid]) ?
+                binarySearchRecursive(mid + 1, endExclusive, value) :
+                binarySearchRecursive(startInclusive, mid, value);
     }
+
+    /**
+     * Iterative version of the binary search algorithm.
+     * Expects collection to be sorted.
+     *
+     * @param value value to find in collection
+     * @return index of the value or -indexToInsert - 1
+     */
+
+    public void binarySearchIterative(int value) {
+        throw new IllegalStateException();
+    }
+
 
     private void mergeSort(int[] data, int startInclusive, int endExclusive, int[] aux) {
 
