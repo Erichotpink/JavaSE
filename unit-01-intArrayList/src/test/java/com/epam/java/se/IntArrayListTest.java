@@ -2,6 +2,7 @@ package com.epam.java.se;
 
 import org.junit.Test;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 import static org.junit.Assert.*;
@@ -24,6 +25,36 @@ public class IntArrayListTest {
             assertEquals("i = " + i, expected[i], list.get(i));
         }
 
+    }
+
+    @Test
+    public void binarySearch() throws Exception {
+
+        final int[] ints = {-14, -13, -1, 0, 0, 1, 2, 12, 56, 56, 56, 120, 666, 4444};
+
+        final IntArrayList list = new IntArrayList(ints);
+
+        checkIndexForValuesOutsideOfArray(list);
+        checkIndexForValuesInsideOfArray(list);
+    }
+
+    private void checkIndexForValuesOutsideOfArray(IntArrayList list) {
+        final int maxValue = list.get(list.getSize() - 1) + 1;
+        final int minValue = list.get(0) - 1;
+
+        assertEquals(-1, list.binarySearch(minValue));
+        assertEquals(-list.getSize() - 1, list.binarySearch(maxValue));
+        assertEquals(-3, list.binarySearch(-5));
+    }
+
+    private void checkIndexForValuesInsideOfArray(IntArrayList list) {
+
+        final int maxValue = list.get(list.getSize() - 1);
+        final int minValue = list.get(0);
+
+        assertEquals(0, list.binarySearch(minValue));
+        assertEquals(list.getSize() - 1, list.binarySearch(maxValue));
+        assertTrue(list.binarySearch(0) >= 0);
     }
 
 }
