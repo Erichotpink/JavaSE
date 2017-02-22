@@ -74,7 +74,8 @@ public class IntArrayList {
      * @return index of the value or -indexToInsert - 1
      */
     public int binarySearch(int value) {
-        return binarySearchRecursive(0, getSize(), value);
+//        return binarySearchRecursive(0, getSize(), value);
+        return binarySearchIterative(value);
     }
 
     private int binarySearchRecursive(int startInclusive, int endExclusive, int value) {
@@ -92,14 +93,25 @@ public class IntArrayList {
 
     /**
      * Iterative version of the binary search algorithm.
-     * Expects collection to be sorted.
      *
      * @param value value to find in collection
      * @return index of the value or -indexToInsert - 1
      */
 
-    public void binarySearchIterative(int value) {
-        throw new IllegalStateException();
+    private int binarySearchIterative(int value) {
+        int startInclusive = 0;
+        int endExclusive = getSize();
+        int mid;
+
+        while (endExclusive > startInclusive) {
+            mid = startInclusive + (endExclusive - startInclusive) / 2;
+
+            if (value == data[mid]) return mid;
+            else if (value > data[mid])  startInclusive = mid + 1;
+            else endExclusive = mid;
+        }
+
+        return -startInclusive - 1;
     }
 
 
