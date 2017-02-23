@@ -63,10 +63,6 @@ public class IntArrayList {
         );
     }
 
-    public void sort() {
-        mergeSort(data, 0, getSize(), new int[getSize()]);
-    }
-
     /**
      * Expects collection to be sorted.
      *
@@ -114,8 +110,13 @@ public class IntArrayList {
         return -startInclusive - 1;
     }
 
+    public void sort() {
+//        mergeSortTopDown(data, 0, getSize(), new int[getSize()]);
+        mergeSortDownUp(data, 0, getSize(), new int[getSize()]);
+    }
 
-    private void mergeSort(int[] data, int startInclusive, int endExclusive, int[] aux) {
+
+    private void mergeSortTopDown(int[] data, int startInclusive, int endExclusive, int[] aux) {
 
         final int length = endExclusive - startInclusive;
 
@@ -125,8 +126,8 @@ public class IntArrayList {
 
         final int mid = startInclusive + length / 2;
 
-        mergeSort(data, startInclusive, mid, aux);
-        mergeSort(data, mid, endExclusive, aux);
+        mergeSortTopDown(data, startInclusive, mid, aux);
+        mergeSortTopDown(data, mid, endExclusive, aux);
 
         merger(data, startInclusive, mid, endExclusive, aux);
     }
@@ -143,6 +144,26 @@ public class IntArrayList {
             else if (j >= endExclusive) data[k] = aux[i++];
             else if (aux[i] < aux[j]) data[k] = aux[i++];
             else data[k] = aux[j++];
+        }
+    }
+
+    private void mergeSortDownUp(int[] data, int startInclusive, int endExclusive, int[] aux) {
+
+        final int length = endExclusive - startInclusive;
+
+        if (length <= 1) {
+            return;
+        }
+
+        int mid;
+        int end;
+
+        for (int size = 1; size <= length; size += size) {
+            for (int startIndex = 0; startIndex < length - size; startIndex += size + size) {
+                mid = startIndex + size;
+                end = Math.min(mid + size, length);
+                merger(data, startIndex, mid, end, aux);
+            }
         }
     }
 
