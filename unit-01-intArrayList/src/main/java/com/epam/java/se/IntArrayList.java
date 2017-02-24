@@ -110,12 +110,25 @@ public class IntArrayList {
         return -startInclusive - 1;
     }
 
+    /**
+     * Sort the array using merge sort algorithm.
+     */
     public void sort() {
 //        mergeSortTopDown(data, 0, getSize(), new int[getSize()]);
         mergeSortDownUp(data, 0, getSize(), new int[getSize()]);
     }
 
 
+    /**
+     * Implementation of the merge sort algorithm.
+     *
+     * Recursive implementation of merge sort algorithm.
+     *
+     * @param data the array to be sorted
+     * @param startInclusive start index
+     * @param endExclusive end index (exclusive)
+     * @param aux auxiliary array
+     */
     private void mergeSortTopDown(int[] data, int startInclusive, int endExclusive, int[] aux) {
 
         final int length = endExclusive - startInclusive;
@@ -132,6 +145,16 @@ public class IntArrayList {
         merger(data, startInclusive, mid, endExclusive, aux);
     }
 
+
+    /**
+     * Helper method. Used by mergeSortTopDown and mergeSortDownUP methods.
+     *
+     * @param data the array to be sorted
+     * @param startInclusive start index
+     * @param mid middle index
+     * @param endExclusive end index (exclusive)
+     * @param aux auxiliary array
+     */
     private void merger(int[] data, int startInclusive, int mid, int endExclusive, int[] aux) {
 
         System.arraycopy(data, startInclusive, aux, startInclusive, endExclusive-startInclusive);
@@ -147,6 +170,16 @@ public class IntArrayList {
         }
     }
 
+    /**
+     * Implementation of the merge sort algorithm.
+     *
+     * Iterative implementation of merge sort algorithm.
+     *
+     * @param data the array to be sorted
+     * @param startInclusive start index
+     * @param endExclusive end index (exclusive)
+     * @param aux auxiliary array
+     */
     private void mergeSortDownUp(int[] data, int startInclusive, int endExclusive, int[] aux) {
 
         final int length = endExclusive - startInclusive;
