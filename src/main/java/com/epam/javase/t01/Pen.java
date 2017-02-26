@@ -33,6 +33,18 @@ public class Pen {
         this.lineWidth = lineWidth;
     }
 
+    public Color getColor() {
+        return new Color(color.getRGB());
+    }
+
+    public double getCost() {
+        return cost;
+    }
+
+    public double getLineWidth() {
+        return lineWidth;
+    }
+
     @Override
     public boolean equals(Object other) {
         if (this == other) return true;
