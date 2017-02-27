@@ -3,6 +3,8 @@ package com.epam.javase.t02;
 import java.util.Objects;
 
 /**
+ * Represents a stationary. Each stationery has name and cost.
+ *
  * Created by aivanov on 2/27/2017.
  */
 public class Stationery {
@@ -33,5 +35,15 @@ public class Stationery {
 
         return (Double.compare(this.cost, obj.cost) == 0)
                 && this.name.equals(obj.name);
+    }
+
+    @Override
+    public int hashCode() {
+        int result;
+        long temp;
+        result = name.hashCode();
+        temp = Double.doubleToLongBits(cost);
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        return result;
     }
 }
