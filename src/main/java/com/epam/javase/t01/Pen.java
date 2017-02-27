@@ -52,8 +52,8 @@ public class Pen {
 
         Pen pen = (Pen) other;
 
-        return (Double.compare(this.cost, pen.cost) != 0)
-                && (Double.compare(this.lineWidth, pen.lineWidth) != 0)
+        return (Double.compare(this.cost, pen.cost) == 0)
+                && (Double.compare(this.lineWidth, pen.lineWidth) == 0)
                 && this.color.equals(pen.color);
     }
 
