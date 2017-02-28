@@ -25,15 +25,15 @@ public class NuclearSubmarine {
     private class NuclearSubmarineEngine {
 
         private void run() {
-            if (!isRunning) {
-                isRunning = !isRunning;
+            if (!NuclearSubmarine.this.isRunning) {
+                NuclearSubmarine.this.isRunning = !NuclearSubmarine.this.isRunning;
                 System.out.println("Engine started");
             }
         }
 
         public void stop() {
-            if (isRunning) {
-                isRunning = !isRunning;
+            if (NuclearSubmarine.this.isRunning) {
+                NuclearSubmarine.this.isRunning = !NuclearSubmarine.this.isRunning;
                 System.out.println("Engine stopped");
             }
         }
