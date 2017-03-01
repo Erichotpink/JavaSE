@@ -9,8 +9,8 @@ import java.math.BigDecimal;
  */
 public abstract class Stationery {
 
-    private String name;
-    private BigDecimal price;
+    protected String name;
+    protected double price;
 
     /**
      * Get the stationery name.
@@ -26,7 +26,7 @@ public abstract class Stationery {
      *
      * @return stationery price
      */
-    public BigDecimal getPrice() {
+    public double getPrice() {
         return price;
     }
 }
