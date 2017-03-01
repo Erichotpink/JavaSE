@@ -1,6 +1,7 @@
 package com.epam.javase.t04;
 
 import java.util.Comparator;
+import com.epam.javase.t03.Stationery;
 
 /**
  * The class implements comparision method to sort stationery by their name.

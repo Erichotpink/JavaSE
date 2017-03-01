@@ -29,4 +29,12 @@ public abstract class Stationery {
     public double getPrice() {
         return price;
     }
+
+    @Override
+    public String toString() {
+        return "Stationery{" +
+                "name='" + name + '\'' +
+                ", price=" + price +
+                '}';
+    }
 }
