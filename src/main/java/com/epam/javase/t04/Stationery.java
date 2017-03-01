@@ -1,5 +1,7 @@
 package com.epam.javase.t04;
 
+import java.util.Comparator;
+
 /**
  * Represents an abstract class for common stationery.
  *
@@ -27,5 +29,6 @@ public abstract class Stationery {
     public double getPrice() {
         return price;
     }
+
 
 }
