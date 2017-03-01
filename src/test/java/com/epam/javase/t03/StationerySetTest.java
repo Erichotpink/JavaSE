@@ -2,10 +2,6 @@ package com.epam.javase.t03;
 
 import org.junit.Test;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Stream;
-
 import static org.junit.Assert.*;
 
 /**
