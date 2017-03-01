@@ -28,11 +28,4 @@ public abstract class Stationery {
         return price;
     }
 
-    @Override
-    public String toString() {
-        return "Stationery{" +
-                "name='" + name + '\'' +
-                ", price=" + price +
-                '}';
-    }
 }

@@ -19,4 +19,23 @@ public class StationerySet {
     public double getTotalCost() {
         return list.stream().mapToDouble( (s) -> s.getPrice()).sum();
     }
+
+    public List<Stationery> getAllStationery() {
+        return new ArrayList<Stationery>(list);
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder str = new StringBuilder();
+
+        str.append("StationerySet{");
+
+        for (Stationery s : list) {
+            str.append(System.lineSeparator() + "Name: " + s.getName() + ", Price: " + s.getPrice());
+        }
+        str.append(System.lineSeparator() + '}');
+
+        return str.toString();
+
+    }
 }
