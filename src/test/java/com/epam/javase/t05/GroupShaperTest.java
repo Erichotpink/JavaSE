@@ -78,19 +78,25 @@ public class GroupShaperTest {
         assertTrue(std1.getSubjectGrade(Subject.HISTORY).equals((double) mark));
     }
 
-    @Test (expected = Exception.class)
+    @Test
     public void testStudentsMethodsNegativeCase() throws Exception {
 
         Student std1 = new Student("Vladimir");
         double grade = -10.1;
         int mark = 1000;
 
-        std1.addSubject(Subject.ENGLISH, mark);
-        std1.addSubject(Subject.SPANISH, grade);
-        std1.addSubject(Subject.BIOLOGY, null);
+        try {
 
-        std1.getSubjectGrade(Subject.ENGLISH).equals(mark);
-        std1.getSubjectGrade(Subject.SPANISH).equals(null);
+            std1.addSubject(Subject.ENGLISH, mark);
+            std1.addSubject(Subject.SPANISH, grade);
+            std1.addSubject(Subject.BIOLOGY, null);
+
+            std1.getSubjectGrade(Subject.ENGLISH).equals(mark);
+            std1.getSubjectGrade(Subject.SPANISH).equals(null);
+            std1.getSubjectGrade(Subject.BIOLOGY).equals(null);
+        } catch (IllegalArgumentException | NullPointerException ex) {
+
+        }
     }
 
     @Test
@@ -105,8 +111,8 @@ public class GroupShaperTest {
         list.add(std1);
 
 
-        GroupShaper group = new GroupShaper(Subject.BIOLOGY, list);
-        group.addStudent(std1);
+//        GroupShaper group = new GroupShaper(Subject.BIOLOGY, list);
+//        group.addStudent(std1);
     }
 
 //
@@ -115,9 +121,6 @@ public class GroupShaperTest {
 //
 //        std1.addSubject(Subject.HISTORY, mark);
 //        assertTrue(std1.getSubjectGrade(Subject.HISTORY).equals((double) mark));
-    }
-
-
 
 //        Student std1 = new Student("Andrey");
 //        Student std2 = new Student("Vladimir");

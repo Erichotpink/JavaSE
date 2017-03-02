@@ -8,7 +8,7 @@ import java.util.*;
 public class Student {
 
     private final String name;
-    private final Map<Subject, Number> subjects = new Hashtable<>();
+    private final Map<Subject, Number> subjects = new HashMap<>();
 
     public Student(String name) {
         Objects.requireNonNull(name, "The argument name cannot be null.");
@@ -26,6 +26,10 @@ public class Student {
 
     public Number getSubjectGrade(Subject subject) {
         return subjects.get(subject);
+    }
+
+    public Set<Subject> getStudentsSubjects() {
+        return new HashSet<Subject>(subjects.keySet());
     }
 
     public String getName() {

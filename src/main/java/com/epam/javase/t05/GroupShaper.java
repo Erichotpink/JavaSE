@@ -7,26 +7,36 @@ import java.util.*;
  */
 public class GroupShaper {
 
-    private Subject subject;
-    private Map<Student, Number> students = new HashMap<>();
+    private Set<Student> studentsSet = new HashSet<>();
+    private Set<Group> groupsSet = new HashSet<>();
 
-    public GroupShaper(Subject subject, List<Student> list) {
-        this.subject = subject;
-        for (Student std : list) {
-            addStudent(std);
+    public GroupShaper(Set<Student> students) {
+        studentsSet.addAll(students);
+    }
+
+    public Set<Group> getStudentGroups(Student student) {
+        Set<Group> temp = new HashSet<>();
+        for (Group g : groupsSet) {
+            if (g.containsStudent(student)) {temp.add(g);}
+        }
+        return temp;
+    }
+
+    public void createGroup(String name, Set<Subject> subj) {
+        Set<Student> stdSet = new HashSet<>();
+
+        for (Student s : studentsSet) {
+            if (s.getStudentsSubjects().containsAll(subj)) {
+                stdSet.add(s);
+            }
+        }
+
+        groupsSet.add(new Group(name, new HashSet<Subject>(subj), stdSet));
+    }
+
+    public void printAllGroups() {
+        for (Group g : groupsSet) {
+            System.out.println(g);
         }
     }
-
-    public void addStudent(Student student) {
-
-        Number grade = student.getSubjectGrade(subject);
-        if ( grade != null) {
-            students.put(student, grade);
-        }
-    }
-
-    public Map getStudentsMark() {
-        return new HashMap(students);
-    }
-
 }

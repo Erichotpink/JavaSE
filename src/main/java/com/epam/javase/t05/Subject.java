@@ -21,7 +21,7 @@ public enum Subject {
 
     private final double minGrade;
     private final double maxGrade;
-    private boolean isInteger;
+    private final boolean isInteger;
 
     Subject(double minGrade, double maxGrade, boolean isInteger) {
         this.minGrade = minGrade;
