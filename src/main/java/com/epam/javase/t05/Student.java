@@ -8,7 +8,7 @@ import java.util.*;
 public class Student {
 
     private final String name;
-    private final Map<Subject, Number> subjects = new HashMap<>();
+    private final Map<Subject, Number> subjects = new Hashtable<>();
 
     public Student(String name) {
         Objects.requireNonNull(name, "The argument name cannot be null.");
