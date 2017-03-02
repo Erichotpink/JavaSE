@@ -20,11 +20,7 @@ public class Student {
         Objects.requireNonNull(subject, "The argument subject cannot be null.");
         Objects.requireNonNull(grade, "The argument grade cannot be null.");
 
-        if (grade.getClass() != subject.getGradeType()) {
-            throw new ClassCastException("Illegal grade type. Specified value: " + grade.getClass() +
-                    " Please specify a new value for " + subject.name() + " with type " + subject.getGradeType());
-        }
-
+        grade = subject.convertGradeToAcceptableFormat(grade);
         subjects.put(subject, grade);
     }
 
