@@ -3,6 +3,8 @@ package com.epam.javase.t05;
 import java.util.*;
 
 /**
+ * Represents a student. Contains name and map of subjects and grades.
+ *
  * Created by aivanov on 2/28/2017.
  */
 public class Student {
@@ -16,6 +18,12 @@ public class Student {
         this.name = name;
     }
 
+    /**
+     * Add the subject and grade to the student object.
+     *
+     * @param subject subject to be added
+     * @param grade grade to be added
+     */
     public void addSubject(Subject subject, Number grade) {
         Objects.requireNonNull(subject, "The argument subject cannot be null.");
         Objects.requireNonNull(grade, "The argument grade cannot be null.");

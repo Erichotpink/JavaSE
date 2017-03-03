@@ -3,7 +3,9 @@ package com.epam.javase.t05;
 import org.junit.Test;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import static org.junit.Assert.assertTrue;
 
@@ -103,49 +105,38 @@ public class GroupShaperTest {
     public void testGroupShaperPositiveCase() throws Exception {
         Student std1 = new Student("Vladimir");
         Student std2 = new Student("Alexandr");
+        Student std3 = new Student("Andrey");
 
-        std1.addSubject(Subject.BIOLOGY, 50.0);
-        std2.addSubject(Subject.HISTORY, 5.0);
+        Set<Student> stdSet = new HashSet<>();
+        stdSet.add(std1);
+        stdSet.add(std2);
+        stdSet.add(std3);
 
         List list = new ArrayList();
         list.add(std1);
 
+        std1.addSubject(Subject.BIOLOGY, 50.0);
+        std1.addSubject(Subject.CHEMISTRY, 5.0);
 
-//        GroupShaper group = new GroupShaper(Subject.BIOLOGY, list);
-//        group.addStudent(std1);
+        std2.addSubject(Subject.HISTORY, 5);
+        std2.addSubject(Subject.ENGLISH, 80.0);
+
+        std3.addSubject(Subject.BIOLOGY, 80);
+        std3.addSubject(Subject.ENGLISH, 90.0);
+        std3.addSubject(Subject.HISTORY, 5.0);
+
+        GroupShaper group = new GroupShaper(stdSet);
+
+        Set<Subject> subjSet1 = new HashSet<>();
+        subjSet1.add(Subject.ENGLISH);
+        subjSet1.add(Subject.HISTORY);
+
+        Set<Subject> subjSet2 = new HashSet<>();
+        subjSet2.add(Subject.BIOLOGY);
+
+        group.createGroup("First", subjSet1);
+        group.createGroup("Second", subjSet2);
+
+        System.out.println(group.getStudentGroups(std3));
     }
-
-//
-//        std1.addSubject(Subject.MATH, mark);
-//        assertTrue(std1.getSubjectGrade(Subject.MATH).equals(mark));
-//
-//        std1.addSubject(Subject.HISTORY, mark);
-//        assertTrue(std1.getSubjectGrade(Subject.HISTORY).equals((double) mark));
-
-//        Student std1 = new Student("Andrey");
-//        Student std2 = new Student("Vladimir");
-//        Student std3 = new Student("Alexandr");
-//
-//        List list = new ArrayList();
-//        list.add(std1);
-//        list.add(std2);
-//        list.add(std3);
-//
-//        std1.addSubject(Subject.BIOLOGY, 50.0);
-//        std1.addSubject(Subject.CHEMISTRY, 5);
-//
-//        std2.addSubject(Subject.HISTORY, 5.0);
-//        std2.addSubject(Subject.ENGLISH, 80);
-//
-//        std3.addSubject(Subject.BIOLOGY, 80.0);
-//        std3.addSubject(Subject.ENGLISH, 90);
-//
-//        GroupShaper group = new GroupShaper(Subject.BIOLOGY, list);
-//
-//        System.out.println(group.getStudentsMark());
-//
-//        GroupShaper group2 = new GroupShaper(Subject.SPANISH, list);
-//
-//        System.out.println(group2.getStudentsMark());
-
 }
