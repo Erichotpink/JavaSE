@@ -1,4 +1,4 @@
-# Unit 2 homework.
+## Unit-02 - Object-oriented programming in Java
 
 Задание 1. Принципы ООП, простейшие классы и объекты
 
