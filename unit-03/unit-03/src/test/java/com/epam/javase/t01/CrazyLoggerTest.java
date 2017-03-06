@@ -12,35 +12,38 @@ import static org.junit.Assert.*;
  */
 public class CrazyLoggerTest {
     @Test
-    public void addRecord() throws Exception {
+    public void testLogAndReadMethods() throws Exception {
 
+        CrazyLogger log = new CrazyLogger();
+
+        String record1 = "Service is starting.";
+        String record2 = "Service is not responding.";
+        String date = LocalDate.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+
+        log.log(record1);
+        log.log(record2);
+        log.log(record2);
+
+        assertTrue(log.read(record1).toString().contains(record1));
+        assertTrue(log.read(record1).toString().contains(date));
+
+        assertTrue(log.read(record2).toString().contains(record2));
+        assertTrue(log.read(record2).toString().contains(date));
     }
 
     @Test
-    public void findRecord() throws Exception {
-
+    public void testToConsole() {
         CrazyLogger log = new CrazyLogger();
-        String str = "Service is not responding.";
 
-        log.addRecord(str);
+        String record1 = "Service is starting.";
+        String record2 = "Service is not responding.";
 
-        assertFalse(log.findRecord(str).equals(""));
-        assertTrue(log.findRecord(str).contains(str));
-        System.out.println(log.findRecord(str));
-    }
+        log.log(record1);
+        log.log(record2);
+        log.log(record2);
 
-    @Test
-    public void testToString() throws Exception {
-
-        CrazyLogger log = new CrazyLogger();
-        log.addRecord("Test");
-        log.addRecord("");
-
-        assertTrue(log.toString().contains("Test"));
-        assertTrue(log.toString().contains(LocalDate.now().
-                   format(DateTimeFormatter.ofPattern("dd-MM-yyyy")).toString()));
-
-        System.out.println(log.toString());
-
+        log.toConsole();
+        System.out.println("---------------");
+        log.toConsole(record1);
     }
 }
