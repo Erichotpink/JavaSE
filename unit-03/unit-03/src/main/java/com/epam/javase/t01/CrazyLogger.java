@@ -32,7 +32,6 @@ public class CrazyLogger {
      * @return full event log
      */
     public StringBuilder read() {
-//        return new StringBuilder(log.toString());
         return read(log, 0, "", new StringBuilder());
     }
 
