@@ -1,10 +1,15 @@
 package com.epam.javase.t01;
 
+import java.io.OutputStream;
+import java.io.PrintStream;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 /**
- * Represents a simple log utility. The class provides log and read methods to write and read log records.
+ * Represents a simple log utility.
+ *
+ * The class provides log and read methods to write and read log records and
+ * toConsole methods to print the log to the specified stream.
  * Each record has the following format:
  * dd-mm-YYYY : hh-mm – message + separator, where separator is ';' + record separator unicode code('\u001e').
  *
@@ -50,7 +55,18 @@ public class CrazyLogger {
      * Print the log to console.
      */
     public void toConsole() {
-        System.out.println(read());
+        toConsole(System.out);
+    }
+
+    /**
+     * Print the log to the specified print stream.
+     *
+     * @param out stream to print the log
+     */
+
+    public void toConsole(OutputStream out) {
+        PrintStream ps = new PrintStream(out, true);
+        ps.print(read(""));
     }
 
     /**
@@ -59,7 +75,18 @@ public class CrazyLogger {
      * @param event events to be printed
      */
     public void toConsole(String event) {
-        System.out.println(read(event));
+       toConsole(System.out, event);
+    }
+
+    /**
+     * Filter the log by the specified event and print to the specified print stream.
+     *
+     * @param out stream to print the log
+     * @param event events to be printed
+     */
+    public void toConsole(OutputStream out, String event) {
+        PrintStream ps = new PrintStream(out, true);
+        ps.print(read(event));
     }
 
     private StringBuilder read(StringBuilder log, int startIndex, String event, StringBuilder result) {
