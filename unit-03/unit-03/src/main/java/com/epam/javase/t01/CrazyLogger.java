@@ -2,8 +2,10 @@ package com.epam.javase.t01;
 
 import java.io.OutputStream;
 import java.io.PrintStream;
+import java.text.MessageFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Date;
 
 /**
  * Represents a simple log utility.
@@ -19,7 +21,6 @@ public class CrazyLogger {
 
     private final StringBuilder log = new StringBuilder();
     private final String separator = ";" + String.valueOf('\u001E');
-    private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy : kk-mm - ");
 
     /**
      * Add a new record to the log.
@@ -27,8 +28,7 @@ public class CrazyLogger {
      * @param event contains an event to be added
      */
     public void log(String event) {
-        String timeStamp = LocalDateTime.now().format(formatter);
-        log.append(timeStamp + event + separator);
+        log.append(MessageFormat.format("{0,date,dd-MM-yyyy : kk-mm} - {1}{2}", new Date(), event, separator));
     }
 
     /**
