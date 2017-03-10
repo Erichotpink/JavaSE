@@ -11,6 +11,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
+ * The class implemented methods to parse given file and find sentences containing ref to picture
+ * and sentences with ref in wrong order.
+ *
  * Created by aivanov on 3/8/2017.
  */
 public class ArticleParser {
@@ -52,17 +55,37 @@ public class ArticleParser {
         while(m.find()) {
             data.add(m.group());
         }
-
-        System.out.println("Size: " + data.size());
         return data;
     }
 
-    public static void main(String[] args) {
-        ArticleParser temp = new ArticleParser();
-        temp.searchForSentencesWithPictures().stream().forEach( s -> {
-//            System.out.println("-----------");
-            System.out.println(s);
-        });
-    }
+    /**
+     * Check if the author refer to pictures in sequence.
+     *
+     * @return set of strings with wrong reference order
+     */
+    public List<String> getSentencesWithWrongRefOrder() {
 
+        List<String> data = this.getSentencesWithRef();
+        List<String> temp = new ArrayList<>();
+        String pattern = "[Рр]ис\\.\\s?\\d+";
+
+        Pattern p = Pattern.compile(pattern, Pattern.UNICODE_CHARACTER_CLASS);
+        Matcher m;
+
+        for (String str : data) {
+            m = p.matcher(str);
+            int max = Integer.MIN_VALUE;
+            boolean isContinue = true;
+            while (m.find() && isContinue) {
+                String s = m.group().replaceAll("[^0-9]", "");
+                int pictureNumber = Integer.parseInt(s);
+                if (pictureNumber < max) {
+                    isContinue = false;
+                    temp.add(str);
+                }
+                max = pictureNumber;
+            }
+        }
+        return temp;
+    }
 }
