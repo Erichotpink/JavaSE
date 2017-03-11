@@ -9,6 +9,8 @@ import java.util.*;
  */
 public final class JavaKeywords {
 
+    private JavaKeywords() {}
+
     public static Set<String> getJavaKeywords() {
         ResourceBundle bundle = PropertyResourceBundle.getBundle("com.epam.javase.t01.javakeywords");
 
