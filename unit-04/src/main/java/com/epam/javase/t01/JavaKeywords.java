@@ -3,13 +3,11 @@ package com.epam.javase.t01;
 import java.util.*;
 
 /**
- * Utility class to get Java keywords list.
+ * Utility class to get Java keywords set.
  *
  * Created by aivanov on 3/10/2017.
  */
 public final class JavaKeywords {
-
-    private JavaKeywords() {}
 
     public static Set<String> getJavaKeywords() {
         ResourceBundle bundle = PropertyResourceBundle.getBundle("com.epam.javase.t01.javakeywords");
