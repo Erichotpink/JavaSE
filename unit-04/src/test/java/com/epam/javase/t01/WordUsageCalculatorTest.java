@@ -1,6 +1,6 @@
-package com.epam.javase.t02;
+package com.epam.javase.t01;
 
-import com.epam.javase.t01.KeywordsReader;
+import com.epam.javase.t01.ByteStreamStatisticsWriter;
 import org.junit.Test;
 
 import java.io.File;
@@ -13,13 +13,13 @@ import static org.junit.Assert.*;
 public class WordUsageCalculatorTest {
     @Test
     public void getKeywordsUsageStat() throws Exception {
-        String src = "C:/Temp/KeywordsReader.java";
+        String src = "C:/Temp/ByteStreamStatisticsWriter.java";
         String dst = "C:/Temp/Result.txt";
 
         File source = new File(src);
         File dest = new File(dst);
 
-        KeywordsReader.getKeywordsUsageStat(source, dest);
+        ByteStreamStatisticsWriter.getKeywordsUsageStat(source, dest);
 
         assertTrue(dest.exists());
     }
