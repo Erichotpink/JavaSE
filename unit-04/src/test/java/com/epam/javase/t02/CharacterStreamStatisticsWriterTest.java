@@ -1,5 +1,6 @@
-package com.epam.javase.t01;
+package com.epam.javase.t02;
 
+import com.epam.javase.t01.ByteStreamStatisticsWriter;
 import org.junit.Test;
 
 import java.io.File;
@@ -7,9 +8,9 @@ import java.io.File;
 import static org.junit.Assert.*;
 
 /**
- * Created by aivanov on 3/11/2017.
+ * Created by aivanov on 3/12/2017.
  */
-public class ByteStreamStatisticsWriterTest {
+public class CharacterStreamStatisticsWriterTest {
     @Test
     public void TestIfResultFileCreatedAndNotEmpty() throws Exception {
         String src = "C:/Temp/JavaKeywords.java";
@@ -37,5 +38,4 @@ public class ByteStreamStatisticsWriterTest {
 
         assertTrue(dest.exists());
     }
-
 }

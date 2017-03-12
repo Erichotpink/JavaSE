@@ -15,7 +15,7 @@ public class ByteStreamStatisticsWriter {
      * @param input source file
      * @param output output file
      */
-    public static void getKeywordsUsageStat(File input, File output) {
+    public static void writeResult(File input, File output) {
 
         try (InputStream in = new BufferedInputStream(new FileInputStream(input));
             OutputStream out = new BufferedOutputStream(new FileOutputStream(output))) {
