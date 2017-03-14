@@ -3,6 +3,7 @@ package com.epam.javase.t02;
 import org.junit.Test;
 
 import java.io.File;
+import java.util.Set;
 
 import static org.junit.Assert.*;
 
@@ -11,14 +12,31 @@ import static org.junit.Assert.*;
  */
 public class PropertiesKeeperTest {
 
-    File file = new File("resources/com.epam.javase02.t02/test.properties");
+    File file = new File("src/test/resources/com/epam/javase/t02/test.txt");
 
     @Test (expected = NoSuchPropertiesFileException.class)
     public void shouldThrowExceptionIfFileIsNotExist() throws Exception {
         PropertiesKeeper keeper = PropertiesKeeper.getInstance(new File(""));
     }
 
-    
+    @Test (expected = NoSuchPropertyKeyException.class)
+    public void shouldThrowExceptionIfPropertiesKeyNotFound() throws Exception {
+        PropertiesKeeper keeper = PropertiesKeeper.getInstance(file);
+        keeper.getValue("value");
+    }
 
+    @Test
+    public void shouldReturnValidValueIfKeyExists() throws Exception {
+        PropertiesKeeper keeper = PropertiesKeeper.getInstance(file);
+        String value = keeper.getValue("key");
+        assertTrue(value.equals("value"));
+    }
 
+    @Test
+    public void shouldReturnAllKeys() throws Exception {
+        PropertiesKeeper keeper = PropertiesKeeper.getInstance(file);
+        Set<String> set = keeper.getAllKeys();
+        assertTrue(set.contains("key"));
+        assertTrue(set.contains("another"));
+    }
 }
