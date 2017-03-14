@@ -18,31 +18,16 @@ public class PropertiesKeeper {
 
     private Properties data = new Properties();
 
-    private PropertiesKeeper(Properties data) {
-        this.data = data;
-    }
+    public PropertiesKeeper() {}
 
     /**
-     * Return instance of the class.
+     * Constructor.
      *
-     * @param path file to be loaded
-     * @return instance of the class
+     * @param file file to be loaded
      * @throws NoSuchPropertiesFileException if the file doesn't exist
      */
-    public static PropertiesKeeper getInstance(File path) throws NoSuchPropertiesFileException {
-        if (!path.exists()) {
-            throw new NoSuchPropertiesFileException("File not found. Please specify a valid path.");
-        }
-
-        Properties data = new Properties();
-
-        try (InputStream in = new FileInputStream(path)) {
-            data.load(in);
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
-
-        return new PropertiesKeeper(data);
+    public PropertiesKeeper(File file) throws NoSuchPropertiesFileException {
+        loadFile(file);
     }
 
     public Set<String> getAllKeys() {
@@ -55,6 +40,21 @@ public class PropertiesKeeper {
         }
 
         return (String) data.getProperty(key);
+    }
+
+    public void loadFile(File file) throws NoSuchPropertiesFileException {
+        if (!file.exists()) {
+            throw new NoSuchPropertiesFileException("File not found. Please specify a valid path.");
+        }
+
+        try (InputStream in = new FileInputStream(file)) {
+            if (data.size() > 0) {
+                data = new Properties();
+            }
+            data.load(in);
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
     }
 
 }
