@@ -1,8 +1,6 @@
 package com.epam.javase.t01;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.io.*;
 import java.nio.file.FileAlreadyExistsException;
 
 /**
@@ -82,6 +80,13 @@ public class FileManager {
         newFile.createNewFile();
     }
 
+    /**
+     * Remove the specified file.
+     *
+     * @param name the file to be removed
+     * @throws NotTextFileException if you try to remove non txt file
+     * @throws FileNotFoundException if the file doesn't exist
+     */
     public void removeFile(String name) throws NotTextFileException, FileNotFoundException {
         if (!name.endsWith(".txt")) {
             throw new NotTextFileException("You can modify only TXT files");
@@ -94,5 +99,34 @@ public class FileManager {
         }
 
         newFile.delete();
+    }
+
+    /**
+     * Append the data to the file.
+     *
+     * @param name the file to be modified
+     * @param in input stream which content to be added
+     * @throws NotTextFileException if the file isn't non-txt
+     * @throws IOException will be thrown due to I/O issues
+     */
+    public void addToFile(String name, Reader in) throws NotTextFileException, IOException {
+        if (!name.endsWith(".txt")) {
+            throw new NotTextFileException("You can modify only TXT files");
+        }
+
+        File newFile = new File(this.getCurrentPath() + "\\" + name);
+
+        if (!newFile.exists()) {
+            newFile.createNewFile();
+        }
+
+        try(BufferedWriter out = new BufferedWriter(new FileWriter(newFile, true));
+            BufferedReader reader = new BufferedReader(in)) {
+
+            char[] buffer = new char[1024];
+            while(reader.read(buffer) != -1) {
+                out.write(buffer);
+            }
+        }
     }
 }
