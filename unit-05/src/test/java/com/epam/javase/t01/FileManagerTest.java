@@ -1,11 +1,10 @@
 package com.epam.javase.t01;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.io.*;
 import java.nio.file.FileAlreadyExistsException;
 
 import static org.junit.Assert.assertFalse;
@@ -108,5 +107,31 @@ public class FileManagerTest {
         assertTrue(objFile.exists());
         fm.removeFile(newFile);
         assertFalse(objFile.exists());
+    }
+
+    @Test (expected = NotTextFileException.class)
+    public void cannotAddDataToNonTxtFile() throws  Exception {
+        String newFile = "Tttt.exe";
+        fm.addToFile(newFile, newFile);
+    }
+
+    @Test
+    public void canAppendDataToTXT() throws Exception {
+
+
+        String newFile = "NEWFILE.txt";
+        File objFile = new File(path + "\\" + newFile);
+        fm.addToFile(newFile, newFile);
+
+        BufferedReader in = new BufferedReader(new FileReader(objFile));
+
+        String str = "";
+        str += in.readLine();
+
+        in.close();
+        objFile.delete();
+
+        assertTrue(str.equals(newFile));
+
     }
 }

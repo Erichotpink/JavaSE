@@ -109,7 +109,7 @@ public class FileManager {
      * @throws NotTextFileException if the file isn't non-txt
      * @throws IOException will be thrown due to I/O issues
      */
-    public void addToFile(String name, Reader in) throws NotTextFileException, IOException {
+    public void addToFile(String name, String data) throws NotTextFileException, IOException {
         if (!name.endsWith(".txt")) {
             throw new NotTextFileException("You can modify only TXT files");
         }
@@ -120,13 +120,8 @@ public class FileManager {
             newFile.createNewFile();
         }
 
-        try(BufferedWriter out = new BufferedWriter(new FileWriter(newFile, true));
-            BufferedReader reader = new BufferedReader(in)) {
-
-            char[] buffer = new char[1024];
-            while(reader.read(buffer) != -1) {
-                out.write(buffer);
-            }
+        try(BufferedWriter out = new BufferedWriter(new FileWriter(newFile, true))) {
+            out.write(data);
         }
     }
 }
