@@ -2,6 +2,7 @@ package com.epam.javase.t01;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.FileAlreadyExistsException;
 
 /**
  * Represents a simple implementation of file manager.
@@ -59,5 +60,27 @@ public class FileManager {
         }
      }
 
+    /**
+     * Create a new file in the current directory.
+     *
+     * @param name the file name
+     * @throws NotTextFileException if you try to create a file with extension other then TXT
+     * @throws IOException if the file already exist or due to some I/O issues
+     */
+    public void createNewFile(String name) throws NotTextFileException, IOException {
+        if (!name.endsWith(".txt")) {
+            throw new NotTextFileException("You can modify only TXT files");
+        }
+
+        File newFile = new File(this.getCurrentPath() + "\\" + name);
+
+        if (newFile.exists()) {
+            throw new FileAlreadyExistsException("The file already exists.");
+        }
+
+        newFile.createNewFile();
+    }
+
+    
 
 }

@@ -4,6 +4,7 @@ import org.junit.Test;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.FileAlreadyExistsException;
 
 import static org.junit.Assert.assertTrue;
 
@@ -61,4 +62,25 @@ public class FileManagerTest {
         assertTrue(fm.getDirectoryContent().length == 0);
     }
 
+    @Test (expected = NotTextFileException.class)
+    public void shouldNotCreateNonTxtFiles() throws Exception {
+        FileManager fm = new FileManager(start);
+        fm.createNewFile("Test.exe");
+    }
+
+    @Test (expected = FileAlreadyExistsException.class)
+    public void shouldNotCreateDuplicateFileInOneDirectory() throws Exception {
+        FileManager fm = new FileManager(start);
+        fm.createNewFile("Text.txt");
+    }
+
+    @Test
+    public void canCreateTxtFile() throws Exception {
+        FileManager fm = new FileManager(start);
+        String newFile = "Tttt.txt";
+        File objFile = new File(start + "\\" + newFile);
+        fm.createNewFile(newFile);
+        assertTrue(objFile.exists());
+        objFile.delete();
+    }
 }
