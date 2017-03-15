@@ -1,6 +1,7 @@
 package com.epam.javase.t01;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.FileAlreadyExistsException;
 
@@ -81,6 +82,17 @@ public class FileManager {
         newFile.createNewFile();
     }
 
-    
+    public void removeFile(String name) throws NotTextFileException, FileNotFoundException {
+        if (!name.endsWith(".txt")) {
+            throw new NotTextFileException("You can modify only TXT files");
+        }
 
+        File newFile = new File(this.getCurrentPath() + "\\" + name);
+
+        if (!newFile.exists()) {
+            throw new FileNotFoundException("No such a file.");
+        }
+
+        newFile.delete();
+    }
 }
