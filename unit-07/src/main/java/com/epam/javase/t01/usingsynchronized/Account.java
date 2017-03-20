@@ -21,6 +21,12 @@ public class Account {
         return balance;
     }
 
+    /**
+     * Deposit money into the account.
+     *
+     * @param amount amount to be deposited
+     * @throws IllegalArgumentException if the amount is negative
+     */
     public void deposit(int amount) {
             if (amount < 0) {
                 throw new IllegalArgumentException("Amount must be positive.");
@@ -28,6 +34,12 @@ public class Account {
             balance += amount;
     }
 
+    /**
+     * Withdraw money from the account.
+     *
+     * @param amount amount to be withdrawn
+     * @throws IllegalArgumentException if the account doesn't have enough money or the specified amount is negative
+     */
     public void withdraw(int amount) {
             if (amount < 0) {
                 throw new IllegalArgumentException("Amount must be positive.");
