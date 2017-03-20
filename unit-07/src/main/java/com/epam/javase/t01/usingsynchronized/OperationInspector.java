@@ -45,38 +45,33 @@ public class OperationInspector {
 
             int srcID = Integer.parseInt(s[0]);
             int destID = Integer.parseInt(s[1]);
+            int amount = Integer.parseInt(s[2]);
 
-            if (srcID > 0 && destID > 0) {
-                int amount = Integer.parseInt(s[2]);
-                Thread t = new Thread(new OperatorTransfer(map.get(srcID), map.get(destID), amount));
-                t.start();
+            if (!map.containsKey(srcID)) {
+                map.put(srcID, new Account(defaultBalance));
             }
-        }
-    }
 
-    private void createAccounts(int maxID) {
-        for (int i = 1; i <= maxID; i++) {
-            map.put(i, new Account(defaultBalance));
+            if (!map.containsKey(destID)) {
+                map.put(destID, new Account(defaultBalance));
+            }
+
+            Thread t = new Thread(new OperatorTransfer(map.get(srcID), map.get(destID), amount));
+            t.start();
         }
     }
 
     private void fileReader(File file) {
         try(BufferedReader in = new BufferedReader(new FileReader(file))) {
             String str = "";
-            int maxAccountID = 0;
 
             while ((str = in.readLine()) != null) {
                 String[] temp = str.split(",");
-                if (temp.length == 3) {
+                if (temp.length == 3 &&
+                        Integer.parseInt(temp[0]) > 0 &&
+                        Integer.parseInt(temp[1]) > 0) {
                     orders.add(temp);
-
-                    int max = Math.max(Integer.parseInt(temp[0]), Integer.parseInt(temp[1]));
-                    if (max > maxAccountID) {
-                        maxAccountID = max;
-                    }
                 }
             }
-            createAccounts(maxAccountID);
         } catch (IOException ex) {
             ex.printStackTrace();
         }
