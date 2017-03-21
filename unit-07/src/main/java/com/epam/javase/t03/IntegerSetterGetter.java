@@ -47,13 +47,18 @@ class IntegerSetterGetter extends Thread {
             System.out.println("Поток " + getName() + " хочет извлечь число.");
             number = resource.getELement();
 
-            if (number == null) {
+            while (number == null) {
                 System.out.println("Поток " + getName() + " ждет пока очередь заполнится.");
                 resource.wait(100);
                 System.out.println("Поток " + getName() + " возобновил работу.");
-            } else {
-                System.out.println("Поток " + getName() + " извлек число " + number);
+                number = resource.getELement();
+                if (number == null) {
+                    System.out.println("Поток " + getName() + " исчерпал лимит ожидания в очереди.");
+                    return;
+                }
             }
+
+            System.out.println("Поток " + getName() + " извлек число " + number);
         }
     }
 
