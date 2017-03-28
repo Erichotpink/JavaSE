@@ -1,274 +1,233 @@
-<div class="WordSection1">
+<html>
 
-+----------------------+----------------------+----------------------+
-| [ ]{style="font-size | [Основная            | [Примеры типичного   |
-| :16.0pt;font-family: | функциональность]{st | использования]{style |
-| "Times New Roman",se | yle="font-size:16.0p | ="font-size:16.0pt;f |
-| rif;                 | t;font-family:"Times | ont-family:"Times Ne |
-|   color:black"}      |  New Roman",serif;   | w Roman",serif;      |
-|                      |   color:black"}      |   color:black"}      |
-+----------------------+----------------------+----------------------+
-| [Set]{style="font-si | [Коллекция которая   | [Имена файлов в      |
-| ze:14.0pt;           | не может содержать   | одной директории,    |
-|   color:black"}      | одинаковых           | список ]{lang="RU"   |
-|                      | элементов, при этом  | style="color:black"} |
-|                      | порядок вставки      | [e]{style="color:bla |
-|                      | элементов не         | ck"}[-]{lang="RU"    |
-|                      | сохраняется(исключен | style="color:black"} |
-|                      | ие                   | [mail]{style="color: |
-|                      | - ]{lang="RU"        | black"}[             |
-|                      | style="color:black"} | адресов,             |
-|                      | [LinkedHashSet]{styl | имена/]{lang="RU"    |
-|                      | e="color:black"}[).  | style="color:black"} |
-|                      | ]{lang="RU"          | [id]{style="color:bl |
-|                      | style="color:black"} | ack"}[               |
-|                      | [Реализует           | запущенных           |
-|                      | все методы           | процессов, колода    |
-|                      | интерфейса           | игральных            |
-|                      | Collection.]{style=" | карт]{lang="RU"      |
-|                      | color:black"}        | style="color:black"} |
-+----------------------+----------------------+----------------------+
-| [List]{style="font-s | [Коллекция которая   | [В случаях когда     |
-| ize:14.0pt;          | сохраняет            | необходимо сохранить |
-|   color:black"}      | последовательность   | определенный порядок |
-|                      | вставки элементов.   | обработки элементов. |
-|                      | Допускает            | Например: история    |
-|                      | существование        | посещения страниц в  |
-|                      | дубликатов. Помимо   | веб-браузере, в      |
-|                      | реализации всех      | системах работы с    |
-|                      | методов интерфейса   | памятью для          |
-|                      | ]{lang="RU"          | отображения          |
-|                      | style="color:black"} | сбодных/занятых      |
-|                      | [Collection]{style=" | блоков памяти,       |
-|                      | color:black"}[       | последовательность   |
-|                      | включет методы для   | действий для         |
-|                      | работы с элементами  | достижения           |
-|                      | по индексу:          | результата(какая-либ |
-|                      | добавление/удаление/ | о                    |
-|                      | получение/замена     | инструкция,          |
-|                      | элемента по          | очередь), протокол   |
-|                      | указанному индексу;  | ]{lang="RU"          |
-|                      | ]{lang="RU"          | style="color:black"} |
-|                      | style="color:black"} | [TCP]{style="color:b |
-|                      | [indexOf]{style="col | lack"}[,             |
-|                      | or:black"}[          | задача               |
-|                      | и ]{lang="RU"        | коммивояжера.]{lang= |
-|                      | style="color:black"} | "RU"                 |
-|                      | [lastIndexOf]{style= | style="color:black"} |
-|                      | "color:black"}[      |                      |
-|                      | для поиска индекса   |                      |
-|                      | элемента; метод для  |                      |
-|                      | добавления           |                      |
-|                      | нескольких элементов |                      |
-|                      | начиная с указанной  |                      |
-|                      | позиции, а также     |                      |
-|                      | метод ]{lang="RU"    |                      |
-|                      | style="color:black"} |                      |
-|                      | [sublist]{style="col |                      |
-|                      | or:black"}[          |                      |
-|                      | позволяющий работать |                      |
-|                      | с частью листа.      |                      |
-|                      | Помимо стандартного  |                      |
-|                      | итератора определяет |                      |
-|                      | итератор ]{lang="RU" |                      |
-|                      | style="color:black"} |                      |
-|                      | [ListIterator]{style |                      |
-|                      | ="color:black"}[,    |                      |
-|                      | который позволяет    |                      |
-|                      | итерироваться по     |                      |
-|                      | листу в обоих        |                      |
-|                      | направлениях, а      |                      |
-|                      | также добавлять и    |                      |
-|                      | удалять              |                      |
-|                      | элементы.]{lang="RU" |                      |
-|                      | style="color:black"} |                      |
-+----------------------+----------------------+----------------------+
-| [Queue]{style="font- | [Реулизует методы    | [Очередь выделения   |
-| size:14.0pt;         | интерфейса           | процессорных         |
-|   color:black"}      | ]{lang="RU"          | ресурсов в           |
-|                      | style="color:black"} | зависимости от       |
-|                      | [Collection]{style=" | приоритета,          |
-|                      | color:black"}[,      | приоритет обработки  |
-|                      | а также 6            | пакетов (]{lang="RU" |
-|                      | дополнительных       | style="color:black"} |
-|                      | методов для          | [QoS]{style="color:b |
-|                      | организации работы с | lack"}[),            |
-|                      | очередью. Методы     | ]{lang="RU"          |
-|                      | ]{lang="RU"          | style="color:black"} |
-|                      | style="color:black"} | [I]{style="color:bla |
-|                      | [add]{style="color:b | ck"}[/]{lang="RU"    |
-|                      | lack"}[/]{lang="RU"  | style="color:black"} |
-|                      | style="color:black"} | [O]{style="color:bla |
-|                      | [remove]{style="colo | ck"}[                |
-|                      | r:black"}[/]{lang="R | ]{lang="RU"          |
-|                      | U"                   | style="color:black"} |
-|                      | style="color:black"} | [operations]{style=" |
-|                      | [element]{style="col | color:black"}[,      |
-|                      | or:black"}[          | операции ]{lang="RU" |
-|                      | соответственно       | style="color:black"} |
-|                      | добавляет/удаляет с  | [Undo]{style="color: |
-|                      | возвратом            | black"}[/]{lang="RU" |
-|                      | значения/получает    | style="color:black"} |
-|                      | элемент без удаления | [Forward]{style="col |
-|                      | возращают            | or:black"}[          |
-|                      | ]{lang="RU"          | в редакторах,        |
-|                      | style="color:black"} | ]{lang="RU"          |
-|                      | [exception]{style="c | style="color:black"} |
-|                      | olor:black"}[        | [Back]{style="color: |
-|                      | если не удалось      | black"}[/]{lang="RU" |
-|                      | выполнить операцию.  | style="color:black"} |
-|                      | Методы ]{lang="RU"   | [Forward]{style="col |
-|                      | style="color:black"} | or:black"}[          |
-|                      | [offer]{style="color | в                    |
-|                      | :black"}[/]{lang="RU | браузерах.]{lang="RU |
-|                      | "                    | "                    |
-|                      | style="color:black"} | style="color:black"} |
-|                      | [poll]{style="color: |                      |
-|                      | black"}[/]{lang="RU" |                      |
-|                      | style="color:black"} |                      |
-|                      | [peek]{style="color: |                      |
-|                      | black"}[             |                      |
-|                      | выполняют            |                      |
-|                      | аналогичные          |                      |
-|                      | действия, однако в   |                      |
-|                      | случае неудачи       |                      |
-|                      | возвращают           |                      |
-|                      | ]{lang="RU"          |                      |
-|                      | style="color:black"} |                      |
-|                      | [false]{style="color |                      |
-|                      | :black"}[            |                      |
-|                      | или ]{lang="RU"      |                      |
-|                      | style="color:black"} |                      |
-|                      | [null]{style="color: |                      |
-|                      | black"}[(в           |                      |
-|                      | случае если очередь  |                      |
-|                      | ограничена размером  |                      |
-|                      | рекомендуется        |                      |
-|                      | использовать         |                      |
-|                      | последнюю группу     |                      |
-|                      | методов во избежании |                      |
-|                      | исключений).         |                      |
-|                      | ]{lang="RU"          |                      |
-|                      | style="color:black"} |                      |
-|                      | [LinkedList]{style=" |                      |
-|                      | color:black"}[       |                      |
-|                      | имплиментирует       |                      |
-|                      | очередь и позволяет  |                      |
-|                      | добавлять            |                      |
-|                      | ]{lang="RU"          |                      |
-|                      | style="color:black"} |                      |
-|                      | [null]{style="color: |                      |
-|                      | black"}[             |                      |
-|                      | значения, что не     |                      |
-|                      | рекомендуется при    |                      |
-|                      | использовании        |                      |
-|                      | очереди, поскольку   |                      |
-|                      | некоторые методы     |                      |
-|                      | возвращают           |                      |
-|                      | ]{lang="RU"          |                      |
-|                      | style="color:black"} |                      |
-|                      | [null]{style="color: |                      |
-|                      | black"}[             |                      |
-|                      | как ошибку           |                      |
-|                      | выполнения операции. |                      |
-|                      | ]{lang="RU"          |                      |
-|                      | style="color:black"} |                      |
-|                      | [PriorityQueue]{styl |                      |
-|                      | e="color:black"}[    |                      |
-|                      | реализует порядок    |                      |
-|                      | очереди на основе    |                      |
-|                      | приоритетов, порядок |                      |
-|                      | ]{lang="RU"          |                      |
-|                      | style="color:black"} |                      |
-|                      | [FIFO]{style="color: |                      |
-|                      | black"}[             |                      |
-|                      | в таком случае может |                      |
-|                      | не соблюдаться.      |                      |
-|                      | ]{lang="RU"          |                      |
-|                      | style="color:black"} |                      |
-+----------------------+----------------------+----------------------+
-| [Map]{style="font-si | [Не имплиментирует   | [Для хранения        |
-| ze:14.0pt;           | интерфейс            | статистики, например |
-|   color:black"}      | ]{lang="RU"          | кол-во посещений     |
-|                      | style="color:black"} | страницы,            |
-|                      | [Collection]{style=" | организации кэша     |
-|                      | color:black"}[,      | данных, таблицы      |
-|                      | стоит особняком.     | индексации.]{lang="R |
-|                      | Представляет собой   | U"                   |
-|                      | некий словарь, т.е.  | style="color:black"} |
-|                      | Отображает некоторый |                      |
-|                      | ключ в значение.     |                      |
-|                      | Набор ключей         |                      |
-|                      | уникален, т.е. Ключи |                      |
-|                      | повторяться не       |                      |
-|                      | могут. Содержит      |                      |
-|                      | базовые методы для   |                      |
-|                      | работы с             |                      |
-|                      | объектами:]{lang="RU |                      |
-|                      | "                    |                      |
-|                      | style="color:black"} |                      |
-|                      | [put]{style="color:  |                      |
-|                      |   black"}[,          |                      |
-|                      | ]{lang="RU"          |                      |
-|                      | style="color:black"} |                      |
-|                      | [get]{style="color:b |                      |
-|                      | lack"}[,             |                      |
-|                      | ]{lang="RU"          |                      |
-|                      | style="color:black"} |                      |
-|                      | [containsKey]{style= |                      |
-|                      | "color:black"}[,     |                      |
-|                      | ]{lang="RU"          |                      |
-|                      | style="color:black"} |                      |
-|                      | [containsValue]{styl |                      |
-|                      | e="color:black"}[,   |                      |
-|                      | ]{lang="RU"          |                      |
-|                      | style="color:black"} |                      |
-|                      | [size]{style="color: |                      |
-|                      | black"}[,            |                      |
-|                      | ]{lang="RU"          |                      |
-|                      | style="color:black"} |                      |
-|                      | [isEmpty]{style="col |                      |
-|                      | or:black"}[.         |                      |
-|                      | Методы для           |                      |
-|                      | выполнения массовых  |                      |
-|                      | операций вставки и   |                      |
-|                      | удаления -           |                      |
-|                      | ]{lang="RU"          |                      |
-|                      | style="color:black"} |                      |
-|                      | [putAll]{style="colo |                      |
-|                      | r:black"}[/]{lang="R |                      |
-|                      | U"                   |                      |
-|                      | style="color:black"} |                      |
-|                      | [clear]{style="color |                      |
-|                      | :black"}[.           |                      |
-|                      | А также методы       |                      |
-|                      | позволяющие вернуть  |                      |
-|                      | объекты ]{lang="RU"  |                      |
-|                      | style="color:black"} |                      |
-|                      | [MAP]{style="color:b |                      |
-|                      | lack"}[              |                      |
-|                      | в виде коллекций:    |                      |
-|                      | ]{lang="RU"          |                      |
-|                      | style="color:black"} |                      |
-|                      | [keySet]{style="colo |                      |
-|                      | r:                   |                      |
-|                      |   black"}[,          |                      |
-|                      | ]{lang="RU"          |                      |
-|                      | style="color:black"} |                      |
-|                      | [values]{style="colo |                      |
-|                      | r:black"}[,          |                      |
-|                      | ]{lang="RU"          |                      |
-|                      | style="color:black"} |                      |
-|                      | [entrySet]{style="co |                      |
-|                      | lor:black"}[,        |                      |
-|                      | соответственно все   |                      |
-|                      | ключи/все            |                      |
-|                      | значения/все записи  |                      |
-|                      | вида ключ-значение.  |                      |
-|                      | ]{lang="RU"          |                      |
-|                      | style="color:black"} |                      |
-+----------------------+----------------------+----------------------+
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=utf-8">
+<meta name=Generator content="Microsoft Word 15 (filtered)">
+<style>
+<!--
+ /* Font Definitions */
+ @font-face
+	{font-family:"Cambria Math";
+	panose-1:2 4 5 3 5 4 6 3 2 4;}
+@font-face
+	{font-family:Calibri;
+	panose-1:2 15 5 2 2 2 4 3 2 4;}
+ /* Style Definitions */
+ p.MsoNormal, li.MsoNormal, div.MsoNormal
+	{margin-top:0in;
+	margin-right:0in;
+	margin-bottom:8.0pt;
+	margin-left:0in;
+	line-height:107%;
+	font-size:11.0pt;
+	font-family:"Calibri",sans-serif;}
+.MsoPapDefault
+	{margin-bottom:8.0pt;
+	line-height:107%;}
+@page WordSection1
+	{size:11.0in 8.5in;
+	margin:1.0in 1.0in 1.0in 1.0in;}
+div.WordSection1
+	{page:WordSection1;}
+-->
+</style>
 
-[ ]{lang="RU"}
+</head>
+
+<body lang=EN-US>
+
+<div class=WordSection1>
+
+<table class=MsoNormalTable border=0 cellspacing=0 cellpadding=0 width=859
+ style='width:644.0pt;margin-left:-.5pt;border-collapse:collapse'>
+ <tr style='height:21.0pt'>
+  <td width=103 style='width:77.0pt;border:solid windowtext 1.0pt;padding:0in 5.4pt 0in 5.4pt;
+  height:21.0pt'>
+  <p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
+  normal'><span style='font-size:16.0pt;font-family:"Times New Roman",serif;
+  color:black'>&nbsp;</span></p>
+  </td>
+  <td width=309 style='width:232.0pt;border:solid windowtext 1.0pt;border-left:
+  none;padding:0in 5.4pt 0in 5.4pt;height:21.0pt'>
+  <p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
+  normal'><span style='font-size:16.0pt;font-family:"Times New Roman",serif;
+  color:black'>Основная функциональность</span></p>
+  </td>
+  <td width=447 style='width:335.0pt;border:solid windowtext 1.0pt;border-left:
+  none;padding:0in 5.4pt 0in 5.4pt;height:21.0pt'>
+  <p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
+  normal'><span style='font-size:16.0pt;font-family:"Times New Roman",serif;
+  color:black'>Примеры типичного использования</span></p>
+  </td>
+ </tr>
+ <tr style='height:75.0pt'>
+  <td width=103 nowrap style='width:77.0pt;border:solid windowtext 1.0pt;
+  border-top:none;padding:0in 5.4pt 0in 5.4pt;height:75.0pt'>
+  <p class=MsoNormal align=center style='margin-bottom:0in;margin-bottom:.0001pt;
+  text-align:center;line-height:normal'><span style='font-size:14.0pt;
+  color:black'>Set</span></p>
+  </td>
+  <td width=309 valign=top style='width:232.0pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt;height:75.0pt'>
+  <p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
+  normal'><span lang=RU style='color:black'>Коллекция которая не может
+  содержать одинаковых элементов, при этом порядок вставки элементов не
+  сохраняется(исключение - </span><span style='color:black'>LinkedHashSet</span><span
+  lang=RU style='color:black'>). </span><span style='color:black'>Реализует все
+  методы интерфейса Collection.</span></p>
+  </td>
+  <td width=447 valign=top style='width:335.0pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt;height:75.0pt'>
+  <p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
+  normal'><span lang=RU style='color:black'>Имена файлов в одной директории,
+  список </span><span style='color:black'>e</span><span lang=RU
+  style='color:black'>-</span><span style='color:black'>mail</span><span
+  lang=RU style='color:black'> адресов, имена/</span><span style='color:black'>id</span><span
+  lang=RU style='color:black'> запущенных процессов, колода игральных карт</span></p>
+  </td>
+ </tr>
+ <tr style='height:255.0pt'>
+  <td width=103 nowrap style='width:77.0pt;border:solid windowtext 1.0pt;
+  border-top:none;padding:0in 5.4pt 0in 5.4pt;height:255.0pt'>
+  <p class=MsoNormal align=center style='margin-bottom:0in;margin-bottom:.0001pt;
+  text-align:center;line-height:normal'><span style='font-size:14.0pt;
+  color:black'>List</span></p>
+  </td>
+  <td width=309 valign=top style='width:232.0pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt;height:255.0pt'>
+  <p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
+  normal'><span lang=RU style='color:black'>Коллекция которая сохраняет
+  последовательность вставки элементов. Допускает существование дубликатов.
+  Помимо реализации всех методов интерфейса </span><span style='color:black'>Collection</span><span
+  lang=RU style='color:black'> включет методы для работы с элементами по
+  индексу: добавление/удаление/получение/замена элемента по указанному индексу;
+  </span><span style='color:black'>indexOf</span><span lang=RU
+  style='color:black'> и </span><span style='color:black'>lastIndexOf</span><span
+  lang=RU style='color:black'> для поиска индекса элемента; метод для
+  добавления нескольких элементов начиная с указанной позиции, а также метод </span><span
+  style='color:black'>sublist</span><span lang=RU style='color:black'>
+  позволяющий работать с частью листа. Помимо стандартного итератора определяет
+  итератор </span><span style='color:black'>ListIterator</span><span lang=RU
+  style='color:black'>, который позволяет итерироваться по листу в обоих
+  направлениях, а также добавлять и удалять элементы.</span></p>
+  </td>
+  <td width=447 valign=top style='width:335.0pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt;height:255.0pt'>
+  <p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
+  normal'><span lang=RU style='color:black'>В случаях когда необходимо
+  сохранить определенный порядок обработки элементов. Например: история
+  посещения страниц в веб-браузере, в системах работы с памятью для отображения
+  сбодных/занятых блоков памяти, последовательность действий для достижения
+  результата(какая-либо инструкция, очередь), протокол </span><span
+  style='color:black'>TCP</span><span lang=RU style='color:black'>, задача
+  коммивояжера.</span></p>
+  </td>
+ </tr>
+ <tr style='height:330.0pt'>
+  <td width=103 nowrap style='width:77.0pt;border:solid windowtext 1.0pt;
+  border-top:none;padding:0in 5.4pt 0in 5.4pt;height:330.0pt'>
+  <p class=MsoNormal align=center style='margin-bottom:0in;margin-bottom:.0001pt;
+  text-align:center;line-height:normal'><span style='font-size:14.0pt;
+  color:black'>Queue</span></p>
+  </td>
+  <td width=309 valign=top style='width:232.0pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt;height:330.0pt'>
+  <p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
+  normal'><span lang=RU style='color:black'>Реулизует методы интерфейса </span><span
+  style='color:black'>Collection</span><span lang=RU style='color:black'>, а
+  также 6 дополнительных методов для организации работы с очередью. Методы </span><span
+  style='color:black'>add</span><span lang=RU style='color:black'>/</span><span
+  style='color:black'>remove</span><span lang=RU style='color:black'>/</span><span
+  style='color:black'>element</span><span lang=RU style='color:black'>
+  соответственно добавляет/удаляет с возвратом значения/получает элемент без
+  удаления возращают </span><span style='color:black'>exception</span><span
+  lang=RU style='color:black'> если не удалось выполнить операцию. Методы </span><span
+  style='color:black'>offer</span><span lang=RU style='color:black'>/</span><span
+  style='color:black'>poll</span><span lang=RU style='color:black'>/</span><span
+  style='color:black'>peek</span><span lang=RU style='color:black'> выполняют
+  аналогичные действия, однако в случае неудачи возвращают </span><span
+  style='color:black'>false</span><span lang=RU style='color:black'> или </span><span
+  style='color:black'>null</span><span lang=RU style='color:black'>(в случае
+  если очередь ограничена размером рекомендуется использовать последнюю группу
+  методов во избежании исключений). </span><span style='color:black'>LinkedList</span><span
+  lang=RU style='color:black'> имплиментирует очередь и позволяет добавлять </span><span
+  style='color:black'>null</span><span lang=RU style='color:black'> значения,
+  что не рекомендуется при использовании очереди, поскольку некоторые методы
+  возвращают </span><span style='color:black'>null</span><span lang=RU
+  style='color:black'> как ошибку выполнения операции. </span><span
+  style='color:black'>PriorityQueue</span><span lang=RU style='color:black'>
+  реализует порядок очереди на основе приоритетов, порядок </span><span
+  style='color:black'>FIFO</span><span lang=RU style='color:black'> в таком
+  случае может не соблюдаться. </span></p>
+  </td>
+  <td width=447 valign=top style='width:335.0pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt;height:330.0pt'>
+  <p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
+  normal'><span lang=RU style='color:black'>Очередь выделения процессорных
+  ресурсов в зависимости от приоритета, приоритет обработки пакетов (</span><span
+  style='color:black'>QoS</span><span lang=RU style='color:black'>), </span><span
+  style='color:black'>I</span><span lang=RU style='color:black'>/</span><span
+  style='color:black'>O</span><span lang=RU style='color:black'>  </span><span
+  style='color:black'>operations</span><span lang=RU style='color:black'>,
+  операции </span><span style='color:black'>Undo</span><span lang=RU
+  style='color:black'>/</span><span style='color:black'>Forward</span><span
+  lang=RU style='color:black'> в редакторах, </span><span style='color:black'>Back</span><span
+  lang=RU style='color:black'>/</span><span style='color:black'>Forward</span><span
+  lang=RU style='color:black'> в браузерах.</span></p>
+  </td>
+ </tr>
+ <tr style='height:195.0pt'>
+  <td width=103 nowrap style='width:77.0pt;border:solid windowtext 1.0pt;
+  border-top:none;padding:0in 5.4pt 0in 5.4pt;height:195.0pt'>
+  <p class=MsoNormal align=center style='margin-bottom:0in;margin-bottom:.0001pt;
+  text-align:center;line-height:normal'><span style='font-size:14.0pt;
+  color:black'>Map</span></p>
+  </td>
+  <td width=309 valign=top style='width:232.0pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt;height:195.0pt'>
+  <p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
+  normal'><span lang=RU style='color:black'>Не имплиментирует интерфейс </span><span
+  style='color:black'>Collection</span><span lang=RU style='color:black'>,
+  стоит особняком. Представляет собой некий словарь, т.е. Отображает некоторый
+  ключ в значение. Набор ключей уникален, т.е. Ключи повторяться не могут.
+  Содержит базовые методы для работы с объектами:</span><span style='color:
+  black'>put</span><span lang=RU style='color:black'>, </span><span
+  style='color:black'>get</span><span lang=RU style='color:black'>, </span><span
+  style='color:black'>containsKey</span><span lang=RU style='color:black'>, </span><span
+  style='color:black'>containsValue</span><span lang=RU style='color:black'>, </span><span
+  style='color:black'>size</span><span lang=RU style='color:black'>, </span><span
+  style='color:black'>isEmpty</span><span lang=RU style='color:black'>.  Методы
+  для выполнения массовых операций вставки и удаления - </span><span
+  style='color:black'>putAll</span><span lang=RU style='color:black'>/</span><span
+  style='color:black'>clear</span><span lang=RU style='color:black'>. А также
+  методы позволяющие вернуть объекты </span><span style='color:black'>MAP</span><span
+  lang=RU style='color:black'> в виде коллекций: </span><span style='color:
+  black'>keySet</span><span lang=RU style='color:black'>, </span><span
+  style='color:black'>values</span><span lang=RU style='color:black'>, </span><span
+  style='color:black'>entrySet</span><span lang=RU style='color:black'>,
+  соответственно все ключи/все значения/все записи вида ключ-значение. </span></p>
+  </td>
+  <td width=447 valign=top style='width:335.0pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt;height:195.0pt'>
+  <p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
+  normal'><span lang=RU style='color:black'>Для хранения статистики, например
+  кол-во посещений страницы, организации кэша данных, таблицы индексации.</span></p>
+  </td>
+ </tr>
+</table>
+
+<p class=MsoNormal><span lang=RU>&nbsp;</span></p>
 
 </div>
+
+</body>
+
+</html>
