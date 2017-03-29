@@ -43,7 +43,14 @@ public class CustomHashMap<K, V> implements Map<K, V> {
     }
 
     @Override
-    public boolean containsValue(Object value) {
+    public boolean containsValue(Object o) {
+        V value = (V) o;
+        for (int i = 0; i < buckets.length; i++) {
+            if (findBucketEntryWithTheSameValue(value, i) != null) {
+                return true;
+            }
+        }
+
         return false;
     }
 
@@ -127,6 +134,16 @@ public class CustomHashMap<K, V> implements Map<K, V> {
         CustomEntry<K, V> current = buckets[index];
         for (;current != null && !current.key.equals(key); current = current.next());
         return current;
+    }
+
+    private CustomEntry<K, V> findBucketEntryWithTheSameValue(V value, int index) {
+        CustomEntry<K, V> current = buckets[index];
+        for (;current != null; current = current.next()) {
+            if (current.value == value || value.equals(current.value)) {
+                return current;
+            }
+        }
+        return null;
     }
 
     private class CustomEntry<K, V> implements Iterator<CustomEntry<K, V>> {

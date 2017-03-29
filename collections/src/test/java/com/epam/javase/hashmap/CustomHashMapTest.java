@@ -11,6 +11,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.IsNull.notNullValue;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Created by aivanov on 3/24/2017.
@@ -20,10 +21,15 @@ import static org.hamcrest.core.IsNull.notNullValue;
 public class CustomHashMapTest {
 
     private Map<Integer, String> m;
+    private Integer key;
+    private String value;
+
 
     @Before
     public void init() {
         m = new CustomHashMap<>();
+        key = new Integer(1000);
+        value = "abc";
     }
 
     @Test
@@ -124,19 +130,23 @@ public class CustomHashMapTest {
     }
 
     @Test(expected = ClassCastException.class)
-    public void testThatContainsKeyMethodThrowsExceptionOnWrongKeyClass() {
+    public void testIfContainsKeyMethodThrowsExceptionOnWrongKeyClass() {
     }
 
     @Test
     public void testContainsValueMethodWorksProperly() {
+        m.put(key, value);
+        assertTrue(m.containsValue(value));
     }
 
     @Test
     public void testContainsValueMethodWorksProperlyOnNullInputValue() {
+     m.put(key, null);
+     assertTrue(m.containsValue(null));
     }
 
     @Test(expected = ClassCastException.class)
-    public void testValueContainsMethodThrowsExceptionOnWrongInputValueClass() {
+    public void testIfContainsValueMethodThrowsExceptionOnWrongInputValueClass() {
     }
 
     @Test
