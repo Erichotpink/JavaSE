@@ -4,6 +4,7 @@ import org.junit.Before;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -119,6 +120,7 @@ public class CustomHashMapTest {
 
     @Test(expected = NullPointerException.class)
     public void testThatContainsKeyMethodThrowsExceptionOnNullKey() {
+        m.containsKey(null);
     }
 
     @Test(expected = ClassCastException.class)
@@ -126,7 +128,7 @@ public class CustomHashMapTest {
     }
 
     @Test
-    public void testContainsValueMethodWorksProperlyOn() {
+    public void testContainsValueMethodWorksProperly() {
     }
 
     @Test

@@ -34,8 +34,12 @@ public class CustomHashMap<K, V> implements Map<K, V> {
     }
 
     @Override
-    public boolean containsKey(Object key) {
-        return false;
+    public boolean containsKey(Object o) {
+        Objects.requireNonNull(o);
+
+        K key = (K) o;
+        int index = getBucketIndex(key);
+        return findBucketEntryWithTheSameKey(key, index) != null;
     }
 
     @Override
