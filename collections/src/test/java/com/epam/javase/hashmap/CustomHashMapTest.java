@@ -2,6 +2,7 @@ package com.epam.javase.hashmap;
 
 import org.junit.Before;
 import org.junit.FixMethodOrder;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -150,9 +151,44 @@ public class CustomHashMapTest {
     }
 
     @Test
-    public void testThatMapCalculateItsSizeProperly() {
-
+    public void testIfNewMapSizeEqualsZero() {
+        assertThat(m.size(), is(0));
     }
 
+    @Test
+    public void testMapSizeAfterAddingTenEqualsKeys() {
+        for (int i = 0; i < 10; i++) {
+            m.put(key, value + i);
+        }
+        assertThat(m.size(), is(1));
+    }
 
+    @Test
+    public void testMapSizeAfterAddingTenDifferentKeys() {
+        int count = 10;
+        for (int i = 0; i < count; i++) {
+            m.put(i, value);
+        }
+        assertThat(m.size(), is(count));
+    }
+
+    @Ignore
+    @Test
+    public void testMapSizeAfterAddingIntegerMaxValueKeys() {
+        for (int i = Integer.MAX_VALUE; i > 0; i--) {
+            m.put(i, value);
+        }
+        assertThat(m.size(), is(Integer.MAX_VALUE));
+    }
+
+    @Ignore
+    @Test
+    public void testMapSizeAfterAddingIntegerMaxValuePlusOneKeys() {
+        CustomHashMap<String, String> map = new CustomHashMap<>();
+
+        for (long i = Integer.MAX_VALUE + 1; i > 0; i--) {
+            map.put("" + i, value);
+        }
+        assertThat(map.size(), is(Integer.MAX_VALUE));
+    }
 }

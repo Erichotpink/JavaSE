@@ -25,7 +25,22 @@ public class CustomHashMap<K, V> implements Map<K, V> {
 
     @Override
     public int size() {
-        return 0;
+
+        long count = 0;
+
+        for (int i = 0; i < buckets.length; i++) {
+            if (buckets[i] != null) {
+                count++;
+                CustomEntry entry = buckets[i];
+                while(entry.hasNext()) {
+                    count++;
+                    entry = entry.next;
+                }
+            }
+        }
+
+        return count > Integer.MAX_VALUE ? Integer.MAX_VALUE : (int) count;
+
     }
 
     @Override
