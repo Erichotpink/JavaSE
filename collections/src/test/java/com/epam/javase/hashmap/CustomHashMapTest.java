@@ -12,6 +12,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.IsNull.notNullValue;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 /**
@@ -190,5 +191,23 @@ public class CustomHashMapTest {
             map.put("" + i, value);
         }
         assertThat(map.size(), is(Integer.MAX_VALUE));
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void testIfRemoveThrowsExceptionIfWeTryRemoveNullKey() {
+        m.remove(null);
+    }
+
+    @Test
+    public void testIfRemoveWorkAsExpected() {
+        m.put(key, value);
+        assertThat(m.remove(key), is(value));
+    }
+
+    @Test
+    public void testIfRemoveTrulyRemoveEntry() {
+        m.put(key, value);
+        m.remove(key);
+        assertFalse(m.containsKey(key));
     }
 }

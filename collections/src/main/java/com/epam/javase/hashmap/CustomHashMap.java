@@ -110,7 +110,33 @@ public class CustomHashMap<K, V> implements Map<K, V> {
     }
 
     @Override
-    public V remove(Object key) {
+    public V remove(Object o) {
+        Objects.requireNonNull(o);
+
+        if (!containsKey(o)) {
+            return null;
+        }
+
+        K key = (K) o;
+
+        int index = getBucketIndex(key);
+
+        CustomEntry<K, V> current = buckets[index];
+
+        if (current.key == key) {
+            buckets[index] = current.next();
+            return current.value;
+        }
+
+        while (current.hasNext()) {
+            if (current.next.key.equals(key)) {
+                V value = current.next().value;
+                current = current.next.next;
+                return value;
+            }
+            current = current.next;
+        }
+
         return null;
     }
 
