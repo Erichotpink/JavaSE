@@ -81,7 +81,13 @@ public class CustomHashMapTest {
 
     @Test
     public void testIfPutMethodReturnValueWhenPutTheSameKeyWithDifferentValue() {
+        throw new UnsupportedOperationException();
+    }
 
+    @Test
+    public void testIfEmptyReturnFalseThenMapIsntEmpty() {
+        m.put(key, value);
+        assertFalse(m.isEmpty());
     }
 
     @Test(expected = NullPointerException.class)
@@ -89,11 +95,10 @@ public class CustomHashMapTest {
         m.get(null);
     }
 
-//    @Test(expected = ClassCastException.class)
-//    @Test
-//    public void testIfGetThrowsExceptionIfWeSpecifyWrongKeyClass() {
-//        m.get(new CustomHashMapTest());
-//    }
+    @Test(expected = ClassCastException.class)
+    public void testIfGetThrowsExceptionIfWeSpecifyWrongKeyClass() {
+        m.get(new CustomHashMapTest());
+    }
 
     @Test
     public void testIfGetReturnNullIfTheKeyWasntFound() {

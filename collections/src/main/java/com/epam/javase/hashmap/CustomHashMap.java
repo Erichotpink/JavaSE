@@ -14,6 +14,8 @@ public class CustomHashMap<K, V> implements Map<K, V> {
 
     private CustomEntry<K, V>[] buckets;
 
+    private int size = 0;
+
     public CustomHashMap() {
         this(DEFAULT_CAPACITY);
     }
@@ -34,7 +36,7 @@ public class CustomHashMap<K, V> implements Map<K, V> {
                 CustomEntry entry = buckets[i];
                 while(entry.hasNext()) {
                     count++;
-                    entry = entry.next;
+                    entry = entry.next();
                 }
             }
         }
@@ -79,7 +81,7 @@ public class CustomHashMap<K, V> implements Map<K, V> {
         CustomEntry<K, V> entry = findBucketEntryWithTheSameKey(key, index);
 
         if (entry != null) {
-            return entry.value;
+            return entry.getValue();
         }
 
         return null;
@@ -99,12 +101,12 @@ public class CustomHashMap<K, V> implements Map<K, V> {
         CustomEntry<K, V> current = findBucketEntryWithTheSameKey(key, index);
         if (Objects.isNull(current)) {
             current = new CustomEntry<>(key, value);
-            current.next = buckets[index];
+            current.setNext(buckets[index]);
             buckets[index] = current;
             return null;
         } else {
-            V oldValue = current.value;
-            current.value = value;
+            V oldValue = current.getValue();
+            current.setValue(value);
             return oldValue;
         }
     }
@@ -123,18 +125,18 @@ public class CustomHashMap<K, V> implements Map<K, V> {
 
         CustomEntry<K, V> current = buckets[index];
 
-        if (current.key == key) {
+        if (current.getKey() == key) {
             buckets[index] = current.next();
-            return current.value;
+            return current.getValue();
         }
 
         while (current.hasNext()) {
-            if (current.next.key.equals(key)) {
-                V value = current.next().value;
-                current = current.next.next;
+            if (current.next().getKey().equals(key)) {
+                V value = current.next().getValue();
+                current = current.next().next();
                 return value;
             }
-            current = current.next;
+            current = current.next();
         }
 
         return null;
@@ -187,7 +189,7 @@ public class CustomHashMap<K, V> implements Map<K, V> {
         return null;
     }
 
-    private class CustomEntry<K, V> implements Iterator<CustomEntry<K, V>> {
+    private class CustomEntry<K, V> implements Map.Entry<K, V>, Iterator<CustomEntry<K, V>> {
         private final K key;
         private V value;
         private CustomEntry<K, V> next = null;
@@ -207,8 +209,54 @@ public class CustomHashMap<K, V> implements Map<K, V> {
             return null;
         }
 
+        @Override
+        public K getKey() {
+            return key;
+        }
+
+        @Override
+        public V getValue() {
+            return value;
+        }
+
+        @Override
+        public V setValue(V value) {
+            return this.value = value;
+        }
+
         public void setNext(CustomEntry<K, V> next) {
             this.next = next;
+        }
+    }
+
+    final class CustomKeySet<K> extends AbstractSet<K> {
+
+        @Override
+        public Iterator<K> iterator() {
+            return new KeySetIterator();
+        }
+
+        @Override
+        public int size() {
+            return 0;
+        }
+    }
+
+    final class KeySetIterator<K> implements Iterator<K> {
+
+        @Override
+        public boolean hasNext() {
+            return false;
+        }
+
+        @Override
+        public K next() {
+            return null;
+        }
+
+        @Override
+        public void remove() {
+
         }
     }
 }
