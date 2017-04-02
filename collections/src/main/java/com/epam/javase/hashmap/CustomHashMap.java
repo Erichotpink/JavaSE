@@ -1,11 +1,6 @@
 package com.epam.javase.hashmap;
 
-import sun.security.krb5.internal.ccache.CCacheInputStream;
-
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Created by aivanov on 3/24/2017.
@@ -25,7 +20,6 @@ public class CustomHashMap<K, V> implements Map<K, V> {
     public CustomHashMap(int capacity) {
         buckets = new CustomEntry[capacity];
     }
-
 
     @Override
     public int size() {
@@ -169,7 +163,7 @@ public class CustomHashMap<K, V> implements Map<K, V> {
 
     @Override
     public Set<Entry<K, V>> entrySet() {
-        return null;
+        return new CustomEntrySet();
     }
 
     private int getBucketIndex(K key) {
@@ -323,6 +317,41 @@ public class CustomHashMap<K, V> implements Map<K, V> {
             current = null;
         }
     }
+
+    final class CustomEntrySet extends AbstractSet<Map.Entry<K, V>> {
+
+        @Override
+        public Iterator<Map.Entry<K, V>> iterator() {
+            return null;
+        }
+
+        @Override
+        public int size() {
+            return CustomHashMap.this.size();
+        }
+
+        @Override
+        public boolean add(Map.Entry<K, V> o) {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public boolean addAll(Collection<? extends Map.Entry<K, V>> c) {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public boolean remove(Object key) {
+            return CustomHashMap.this.removeEntry(key) != null;
+        }
+
+        @Override
+        public void clear() {
+            CustomHashMap.this.clear();
+        }
+    }
+
+
 
     public static void main(String[] args) {
         CustomHashMap<Integer, String> m = new CustomHashMap<>();

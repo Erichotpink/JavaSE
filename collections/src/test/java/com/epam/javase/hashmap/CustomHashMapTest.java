@@ -23,6 +23,7 @@ public class CustomHashMapTest {
 
     private Map<Integer, String> m;
     private Set<Integer> keySet;
+    private Set<Map.Entry<Integer, String>> entrySet;
     private final Integer key = new Integer(1000);
     private final String value = "abc";;
     private final Integer[] values = {100, 222, 3123, 122, 987, 0};
@@ -32,6 +33,7 @@ public class CustomHashMapTest {
     public void init() {
         m = new CustomHashMap<>();
         keySet = m.keySet();
+        entrySet = m.entrySet();
     }
 
     @Test
@@ -389,4 +391,164 @@ public class CustomHashMapTest {
         assertThat(keySet.size(), is(m.size()));
     }
 
+    @Test
+    public void testIfEmptyMapReturnEmptyEntrySet() {
+        assertThat(m.entrySet().size(), is(0));
+    }
+
+    @Ignore
+    @Test
+    public void testIfEntrySetAndMapContainSameValues() {
+        for (Integer i : values) {
+            m.put(i, null);
+        }
+
+        for (Integer i : keySet) {
+            assertTrue(m.containsKey(i));
+        }
+    }
+
+    @Test(expected = UnsupportedOperationException.class)
+    public void testIfEntrySetThrowsExceptionOnAddMethodInvocation() {
+        keySet.add(new Integer(1));
+    }
+
+    @Test(expected = UnsupportedOperationException.class)
+    public void testIfEntrySetThrowsExceptionOnAddAllMethodInvocation() {
+        keySet.addAll(Collections.singletonList(key));
+    }
+
+    @Test
+    public void testIfEntrySetIteratorRemoveMethodTrulyRemoveElementFromMap() {
+
+        for (Integer i : values) {
+            m.put(i, null);
+        }
+
+        Iterator<Map.Entry<Integer, String>> iterator = entrySet.iterator();
+        while (iterator.hasNext()) {
+            iterator.next();
+            iterator.remove();
+        }
+        assertTrue(m.isEmpty());
+    }
+
+    @Ignore
+    @Test
+    public void testIfEntrySetRemoveMethodTrulyRemoveElementFromMap() {
+        for (Integer i : values) {
+            m.put(key, null);
+        }
+
+        for (Integer i : values) {
+            keySet.remove(key);
+            assertFalse(m.containsKey(key));
+        }
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void testIfEntrySetRemoveMethodThrowsExceptionOnNullKey() {
+        keySet.remove(null);
+    }
+
+    @Ignore
+    @Test
+    public void testIfEntrySetRemoveMethodReturnTrueOnSuccess() {
+        m.put(key, null);
+        assertTrue(keySet.remove(key));
+    }
+
+    @Ignore
+    @Test
+    public void testIfEntrySetRemoveMethodReturnFalseIfMapDoesntContainSuchKey() {
+        assertFalse(keySet.remove(key));
+    }
+
+    @Ignore
+    @Test
+    public void testIfEntrySetRemoveAllMethodTrulyRemoveElementsFromMap() {
+
+        for (Integer i : values) {
+            m.put(i, null);
+        }
+
+        entrySet.removeAll(Arrays.asList(values));
+
+        for (Integer i : values) {
+            assertFalse(m.containsKey(i));
+        }
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void testIfEntrySetRemoveAllMethodThrowsExceptionIfKeyIsNull() {
+        entrySet.removeAll(null);
+    }
+
+    @Ignore
+    @Test
+    public void testIfEntrySetRemoveAllMethodReturnTrueOnSuccess() {
+        m.put(key, null);
+        assertTrue(keySet.removeAll(Collections.singleton(key)));
+    }
+
+    @Ignore
+    @Test
+    public void testIfEntrySetRemoveAllMethodReturnFalseIfMapDoesntContainSuchKey() {
+        assertFalse(keySet.remove(key));
+    }
+
+    @Ignore
+    @Test
+    public void testIfEntrySetRetainAllMethodTrulyRemoveElementsFromMap() {
+
+        int[] src = {1, 2, 3, 4, 5};
+        int[] remove = {1, 2, 3};
+        int[] retain = {4, 5};
+
+        for (Integer i : src) {
+            m.put(i, null);
+        }
+
+        keySet.retainAll(Arrays.asList(retain));
+
+        for (Integer i : remove) {
+            assertFalse(m.containsKey(i));
+        }
+    }
+
+    @Test
+    public void testIfEntrySetClearMethodTrulyClearMap() {
+        for (Integer i : values) {
+            m.put(i, null);
+        }
+
+        entrySet.clear();
+        assertTrue(m.isEmpty());
+    }
+
+    @Test
+    public void testIfHashMapClearedByEntrySetMethodDoesntContainElements() {
+        for (Integer i : values) {
+            m.put(i, null);
+        }
+
+        entrySet.clear();
+        for (Integer i : values) {
+            assertFalse(m.containsKey(i));
+        }
+    }
+
+    @Test
+    public void testIfEntrySetSizeReturnZeroOnEmptyMap() {
+        assertThat(entrySet.size(), is(0));
+    }
+
+    @Test
+    public void testIfEntrySetSizeEqualsToMapSize() {
+        for (Integer i : values) {
+            m.put(i, null);
+        }
+
+        assertThat(entrySet.size(), is(m.size()));
+    }
 }
