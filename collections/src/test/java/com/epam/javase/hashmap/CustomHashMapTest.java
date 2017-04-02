@@ -5,8 +5,7 @@ import org.junit.FixMethodOrder;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
@@ -23,15 +22,16 @@ import static org.junit.Assert.assertTrue;
 public class CustomHashMapTest {
 
     private Map<Integer, String> m;
-    private Integer key;
-    private String value;
+    private Set<Integer> keySet;
+    private final Integer key = new Integer(1000);
+    private final String value = "abc";;
+    private final Integer[] values = {100, 222, 3123, 122, 987, 0};
 
 
     @Before
     public void init() {
         m = new CustomHashMap<>();
-        key = new Integer(1000);
-        value = "abc";
+        keySet = m.keySet();
     }
 
     @Test
@@ -69,8 +69,6 @@ public class CustomHashMapTest {
 
     @Test
     public void testIfItPossibleToPutTheSameKeyWithDifferentValue() {
-        Integer key = new Integer(10);
-
         String oldValue = "abc";
         String newValue = "cba";
         m.put(key, oldValue);
@@ -80,8 +78,12 @@ public class CustomHashMapTest {
     }
 
     @Test
-    public void testIfPutMethodReturnValueWhenPutTheSameKeyWithDifferentValue() {
-        throw new UnsupportedOperationException();
+    public void testIfPutMethodReturnOldValueWhenPutTheSameKeyWithDifferentValue() {
+        String oldValue = "abc";
+        String newValue = "cba";
+        m.put(key, oldValue);
+
+        assertThat(m.put(key, newValue), is(oldValue));
     }
 
     @Test
@@ -95,6 +97,7 @@ public class CustomHashMapTest {
         m.get(null);
     }
 
+    @Ignore
     @Test(expected = ClassCastException.class)
     public void testIfGetThrowsExceptionIfWeSpecifyWrongKeyClass() {
         m.get(new CustomHashMapTest());
@@ -123,6 +126,7 @@ public class CustomHashMapTest {
         assertThat(m.get(key), is(nullValue()));
     }
 
+    @Ignore
     @Test(expected = OutOfMemoryError.class)
     public void testThatMapHaveInfiniteCapacity() {
     }
@@ -136,8 +140,11 @@ public class CustomHashMapTest {
         m.containsKey(null);
     }
 
+    @Ignore
     @Test(expected = ClassCastException.class)
     public void testIfContainsKeyMethodThrowsExceptionOnWrongKeyClass() {
+
+        Integer key = new Integer(16);
     }
 
     @Test
@@ -152,6 +159,7 @@ public class CustomHashMapTest {
      assertTrue(m.containsValue(null));
     }
 
+    @Ignore
     @Test(expected = ClassCastException.class)
     public void testIfContainsValueMethodThrowsExceptionOnWrongInputValueClass() {
     }
@@ -215,4 +223,170 @@ public class CustomHashMapTest {
         m.remove(key);
         assertFalse(m.containsKey(key));
     }
+
+    @Test
+    public void testIfEmptyMapReturnEmptyKeySet() {
+        assertThat(m.keySet().size(), is(0));
+    }
+
+    @Test
+    public void testIfKeySetAndMapContainSameValues() {
+        for (Integer i : values) {
+            m.put(i, null);
+        }
+
+        for (Integer i : keySet) {
+            assertTrue(m.containsKey(i));
+        }
+    }
+
+    @Test(expected = UnsupportedOperationException.class)
+    public void testIfKeySetThrowsExceptionOnAddMethodInvocation() {
+        keySet.add(new Integer(1));
+    }
+
+    @Test(expected = UnsupportedOperationException.class)
+    public void testIfKeySetThrowsExceptionOnAddAllMethodInvocation() {
+        keySet.addAll(Collections.singletonList(key));
+    }
+
+    @Test
+    public void testIfKeySetIteratorRemoveMethodTrulyRemoveElementFromMap() {
+
+        for (Integer i : values) {
+            m.put(i, null);
+        }
+
+        Iterator<Integer> iterator = keySet.iterator();
+        while (iterator.hasNext()) {
+            iterator.next();
+            iterator.remove();
+        }
+        assertTrue(m.isEmpty());
+    }
+
+    @Test
+    public void testIfKeySetRemoveMethodTrulyRemoveElementFromMap() {
+        for (Integer i : values) {
+            m.put(key, null);
+        }
+
+        for (Integer i : values) {
+            keySet.remove(key);
+            assertFalse(m.containsKey(key));
+        }
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void testIfKeySetRemoveMethodThrowsExceptionOnNullKey() {
+        keySet.remove(null);
+    }
+
+    @Test
+    public void testIfKeySetRemoveMethodReturnTrueOnSuccess() {
+        m.put(key, null);
+        assertTrue(keySet.remove(key));
+    }
+
+    @Test
+    public void testIfKeySetRemoveMethodReturnFalseIfMapDoesntContainSuchKey() {
+        assertFalse(keySet.remove(key));
+    }
+
+    @Test
+    public void testIfKeySetRemoveAllMethodTrulyRemoveElementsFromMap() {
+
+        for (Integer i : values) {
+            m.put(i, null);
+        }
+
+        keySet.removeAll(Arrays.asList(values));
+
+        for (Integer i : values) {
+            assertFalse(m.containsKey(i));
+        }
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void testIfKeySetRemoveAllMethodThrowsExceptionIfKeyIsNull() {
+        keySet.removeAll(null);
+    }
+
+    @Test
+    public void testIfKeySetRemoveAllMethodReturnTrueOnSuccess() {
+        m.put(key, null);
+        assertTrue(keySet.removeAll(Collections.singleton(key)));
+    }
+
+    @Test
+    public void testIfKeySetRemoveAllMethodReturnFalseIfMapDoesntContainSuchKey() {
+        assertFalse(keySet.remove(key));
+    }
+
+    @Test
+    public void testIfKeySetRetainAllMethodTrulyRemoveElementsFromMap() {
+
+        int[] src = {1, 2, 3, 4, 5};
+        int[] remove = {1, 2, 3};
+        int[] retain = {4, 5};
+
+        for (Integer i : src) {
+            m.put(i, null);
+        }
+
+        keySet.retainAll(Arrays.asList(retain));
+
+        for (Integer i : remove) {
+            assertFalse(m.containsKey(i));
+        }
+    }
+
+    @Test
+    public void testIfKeySetClearMethodTrulyClearMap() {
+        for (Integer i : values) {
+            m.put(i, null);
+        }
+
+        keySet.clear();
+        assertTrue(m.isEmpty());
+    }
+
+    @Test
+    public void testIfHashMapClearedByKeySetMethodDoesntContainElements() {
+        for (Integer i : values) {
+            m.put(i, null);
+        }
+
+        keySet.clear();
+        for (Integer i : values) {
+            assertFalse(m.containsKey(i));
+        }
+    }
+
+    @Test
+    public void testIfHashMapClearedByClearMethodDoesntContainElements() {
+        for (Integer i : values) {
+            m.put(i, null);
+        }
+
+        m.clear();
+        for (Integer i : values) {
+            assertFalse(m.containsKey(i));
+        }
+    }
+
+    @Test
+    public void testIfKeySetSizeReturnZeroOnEmptyMap() {
+        assertThat(keySet.size(), is(0));
+    }
+
+    @Test
+    public void testIfKeySetSizeEqualsToMapSize() {
+        for (Integer i : values) {
+            m.put(i, null);
+        }
+
+        assertThat(keySet.size(), is(m.size()));
+    }
+
 }

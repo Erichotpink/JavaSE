@@ -2,6 +2,8 @@ package com.epam.javase.hashmap;
 
 import sun.security.krb5.internal.ccache.CCacheInputStream;
 
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -14,7 +16,7 @@ public class CustomHashMap<K, V> implements Map<K, V> {
 
     private CustomEntry<K, V>[] buckets;
 
-    private int size = 0;
+    private long size = 0;
 
     public CustomHashMap() {
         this(DEFAULT_CAPACITY);
@@ -27,27 +29,12 @@ public class CustomHashMap<K, V> implements Map<K, V> {
 
     @Override
     public int size() {
-
-        long count = 0;
-
-        for (int i = 0; i < buckets.length; i++) {
-            if (buckets[i] != null) {
-                count++;
-                CustomEntry entry = buckets[i];
-                while(entry.hasNext()) {
-                    count++;
-                    entry = entry.next();
-                }
-            }
-        }
-
-        return count > Integer.MAX_VALUE ? Integer.MAX_VALUE : (int) count;
-
+        return size > Integer.MAX_VALUE ? Integer.MAX_VALUE : (int) size;
     }
 
     @Override
     public boolean isEmpty() {
-        return false;
+        return size == 0;
     }
 
     @Override
@@ -91,52 +78,67 @@ public class CustomHashMap<K, V> implements Map<K, V> {
     public V put(K key, V value) {
         Objects.requireNonNull(key);
 
+        V oldValue = null;
         int index = getBucketIndex(key);
 
         if (buckets[index] == null) {
             buckets[index] = new CustomEntry<>(key, value);
-            return null;
+            size++;
+            return oldValue;
         }
 
         CustomEntry<K, V> current = findBucketEntryWithTheSameKey(key, index);
+
         if (Objects.isNull(current)) {
             current = new CustomEntry<>(key, value);
             current.setNext(buckets[index]);
             buckets[index] = current;
-            return null;
+            size++;
         } else {
-            V oldValue = current.getValue();
+            oldValue = current.getValue();
             current.setValue(value);
-            return oldValue;
         }
+
+        return oldValue;
     }
 
     @Override
     public V remove(Object o) {
         Objects.requireNonNull(o);
 
-        if (!containsKey(o)) {
-            return null;
-        }
+        CustomEntry<K, V> entry = removeEntry(o);
+
+        if (Objects.nonNull(entry)) {
+            size--;
+            return entry.getValue();
+        };
+
+        return null;
+    }
+
+    private CustomEntry<K, V> removeEntry(Object o) {
 
         K key = (K) o;
 
         int index = getBucketIndex(key);
 
+        if (Objects.isNull(buckets[index])) {
+            return null;
+        }
+
         CustomEntry<K, V> current = buckets[index];
 
         if (current.getKey() == key) {
             buckets[index] = current.next();
-            return current.getValue();
-        }
-
-        while (current.hasNext()) {
-            if (current.next().getKey().equals(key)) {
-                V value = current.next().getValue();
-                current = current.next().next();
-                return value;
-            }
-            current = current.next();
+            return current;
+        } else {
+            while (current.hasNext()) {
+                if (current.next().getKey().equals(key)) {
+                    CustomEntry<K, V> next = current.next();
+                    current.setNext(next.next());
+                    return next;
+                }
+             }
         }
 
         return null;
@@ -144,17 +146,20 @@ public class CustomHashMap<K, V> implements Map<K, V> {
 
     @Override
     public void putAll(Map<? extends K, ? extends V> m) {
+        // TO DO
+        throw new UnsupportedOperationException();
 
     }
 
     @Override
     public void clear() {
         buckets = new CustomEntry[buckets.length];
+        size = 0;
     }
 
     @Override
     public Set<K> keySet() {
-        return null;
+        return new CustomKeySet<>();
     }
 
     @Override
@@ -206,7 +211,7 @@ public class CustomHashMap<K, V> implements Map<K, V> {
 
         @Override
         public CustomEntry<K, V> next() {
-            return null;
+            return next;
         }
 
         @Override
@@ -232,31 +237,102 @@ public class CustomHashMap<K, V> implements Map<K, V> {
     final class CustomKeySet<K> extends AbstractSet<K> {
 
         @Override
-        public Iterator<K> iterator() {
-            return new KeySetIterator();
+        public boolean add(K o) {
+            throw new UnsupportedOperationException();
         }
+
+        @Override
+        public boolean addAll(Collection<? extends K> c) {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public void clear() {
+            CustomHashMap.this.clear();
+        }
+
+        @Override
+        public Iterator<K> iterator() {return new KeyIterator();}
 
         @Override
         public int size() {
-            return 0;
+            return CustomHashMap.this.size();
+        }
+
+        @Override
+        public boolean remove(Object key) {
+            return CustomHashMap.this.removeEntry(key) != null;
         }
     }
 
-    final class KeySetIterator<K> implements Iterator<K> {
+    final class KeyIterator implements Iterator {
+
+        private CustomEntry<K, V> current = null;
+        private CustomEntry<K, V> next = null;
+        private CustomEntry<K, V>[] data = buckets;
+
+        private int index = 0;
+
+        public KeyIterator() {
+            for (;index < data.length && data[index] == null; index++);
+
+            if (index < data.length) {
+                next = data[index];
+            }
+        }
 
         @Override
         public boolean hasNext() {
-            return false;
+            return next != null;
+        }
+
+        private CustomEntry<K, V> getEntry() {
+
+            if (index >= data.length) {
+                throw new NoSuchElementException();
+            }
+
+            current = next;
+
+            if (next.next() != null) {
+                next = next.next();
+            } else {
+                for (++index; index < data.length && data[index] == null; index++);
+
+                if (index < data.length) {
+                    next = data[index];
+                } else {
+                    next = null;
+                }
+            }
+
+            return current;
         }
 
         @Override
         public K next() {
-            return null;
+            return getEntry().getKey();
         }
 
         @Override
         public void remove() {
-
+            if (Objects.isNull(current)) {
+                throw new IllegalStateException();
+            }
+            CustomHashMap.this.remove(current.getKey());
+            current = null;
         }
+    }
+
+    public static void main(String[] args) {
+        CustomHashMap<Integer, String> m = new CustomHashMap<>();
+        for (int i = 0; i < 17; i++) {
+            m.put(i, null);
+        }
+
+        Set<Integer> set = m.keySet();
+        Iterator<Integer> it = set.iterator();
+
+        set.stream().forEach(System.out::println);
     }
 }
