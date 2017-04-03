@@ -138,7 +138,27 @@ public class CustomHashMap<K, V> implements Map<K, V> {
         return new CustomEntrySet();
     }
 
-    // Auxiliary
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        CustomHashMap<?, ?> that = (CustomHashMap<?, ?>) o;
+
+        if (size != that.size) return false;
+        return this.entrySet().equals(that.entrySet());
+    }
+
+    @Override
+    public int hashCode() {
+        int result = Arrays.hashCode(buckets);
+        result = 31 * result + (int) (size ^ (size >>> 32));
+        return result;
+    }
+
+    //
+    // ---------- Auxiliary and non-public methods ----------
+    //
 
     private int getBucketIndex(K key) {
         int hashcode = key.hashCode();

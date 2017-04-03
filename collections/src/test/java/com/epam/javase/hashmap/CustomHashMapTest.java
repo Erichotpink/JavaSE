@@ -551,4 +551,51 @@ public class CustomHashMapTest {
 
         assertThat(entrySet.size(), is(m.size()));
     }
+
+    @Test
+    public void testIfEqualMethodReturnTrueOnTheSameMap() {
+        for (Integer i : values) {
+            m.put(i, null);
+        }
+
+        assertTrue(m.equals(m));
+    }
+
+    @Test
+    public void testIfEqualReturnFalseOnTwoDifferentMaps() {
+        CustomHashMap<String, String> that = new CustomHashMap<>();
+        that.put("qqq", "lll");
+
+        for (Integer i : values) {
+            m.put(i, null);
+        }
+
+        assertFalse(that.equals(m));
+    }
+
+    @Test
+    public void testIfEqualReturnTrueOnTwoEqualMaps() {
+        CustomHashMap<Integer, String> that = new CustomHashMap<>();
+
+        for (Integer i : values) {
+            m.put(i, null);
+            that.put(i, null);
+        }
+
+        assertTrue(that.equals(m));
+    }
+
+    @Test
+    public void testIfEqualReturnFalseOnNullArgument() {
+        assertFalse(m.equals(null));
+    }
+
+    @Test (expected = NullPointerException)
+    public void testIfPutAllThrowsExceptionOnNullArgument() {
+        m.putAll(null);
+    }
+
+    
+
+
 }
