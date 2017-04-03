@@ -590,12 +590,24 @@ public class CustomHashMapTest {
         assertFalse(m.equals(null));
     }
 
-    @Test (expected = NullPointerException)
+    @Test (expected = NullPointerException.class)
     public void testIfPutAllThrowsExceptionOnNullArgument() {
         m.putAll(null);
     }
 
-    
+    @Test
+    public void testIfPutAllTrulyPutElementsToTheMap() {
+        CustomHashMap<Integer, String> that = new CustomHashMap<>();
+        m.put(10, "abc");
+        that.put(10, "test1");
+        that.put(1598, "test2");
+        m.putAll(that);
+
+        assertTrue(m.containsValue("test1"));
+        assertTrue(m.containsKey(1598));
+        assertTrue(m.size() == 2);
+    }
+
 
 
 }
