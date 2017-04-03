@@ -1,7 +1,6 @@
 package com.epam.javase.hashmap;
 
 import java.util.*;
-import java.util.function.Consumer;
 
 /**
  * Created by aivanov on 3/24/2017.
@@ -9,17 +8,50 @@ import java.util.function.Consumer;
 public class CustomHashMap<K, V> implements Map<K, V> {
 
     private static final int DEFAULT_CAPACITY = 16;
+    private static final int MAX_CAPACITY = 1 << 30;
+    private static final int MIN_CAPACITY = 1 ;
+    private static final double DEFAULT_LOADFACTOR = 0.75f;
+    private static final double MIN_LOADFACTOR = 0.5f;
+    private static final double MAX_LOADFACTOR = 0.9f;
 
-    private CustomEntry<K, V>[] buckets;
-
+    private final double loadFactor;
+    private int threshold;
     private long size = 0;
+    private CustomEntry<K, V>[] buckets;
 
     public CustomHashMap() {
         this(DEFAULT_CAPACITY);
     }
 
     public CustomHashMap(int capacity) {
+        this(capacity, DEFAULT_LOADFACTOR);
+    }
+
+    public CustomHashMap(int capacity, double loadFactor) {
+        if (capacity < MIN_CAPACITY || capacity > MAX_CAPACITY) {
+            throw new IllegalArgumentException("The specified capacity is out of range " + MIN_CAPACITY + " " + MAX_CAPACITY);
+        }
+
+        if (Double.compare(loadFactor, MIN_LOADFACTOR) < 0 || Double.compare(loadFactor, MAX_LOADFACTOR) > 0) {
+            throw new IllegalArgumentException("The specified threshold is out of range " + MIN_LOADFACTOR + " " + MAX_LOADFACTOR);
+        }
+
+        this.loadFactor = loadFactor;
         buckets = new CustomEntry[capacity];
+        threshold = calculateThreshold();
+    }
+
+    private int calculateThreshold() {
+        return (int) (buckets.length * loadFactor);
+    }
+
+    private void resizeMap() {
+        if (buckets.length >= MAX_CAPACITY) {
+            return;
+        }
+
+        int newCapacity = buckets.length * 2 <= MAX_CAPACITY ? buckets.length * 2 : MAX_CAPACITY;
+        CustomEntry<K, V>[] newBuckets = new CustomEntry[newCapacity];
     }
 
 
@@ -47,7 +79,7 @@ public class CustomHashMap<K, V> implements Map<K, V> {
         Objects.requireNonNull(o);
 
         K key = (K) o;
-        int index = getBucketIndex(key);
+        int index = getBucketIndex(key, buckets.length);
         return findBucketEntryWithTheSameKey(key, index) != null;
     }
 
@@ -75,7 +107,7 @@ public class CustomHashMap<K, V> implements Map<K, V> {
 
         K key = (K) o;
 
-        int index = getBucketIndex(key);
+        int index = getBucketIndex(key, buckets.length);
         CustomEntry<K, V> entry = findBucketEntryWithTheSameKey(key, index);
 
         if (entry != null) {
@@ -93,7 +125,7 @@ public class CustomHashMap<K, V> implements Map<K, V> {
         Objects.requireNonNull(key);
 
         V oldValue = null;
-        int index = getBucketIndex(key);
+        int index = getBucketIndex(key, buckets.length);
 
         if (buckets[index] == null) {
             buckets[index] = new CustomEntry<>(key, value);
@@ -114,6 +146,27 @@ public class CustomHashMap<K, V> implements Map<K, V> {
         }
 
         return oldValue;
+    }
+
+    public CustomEntry<K, V> addEntry(CustomEntry<K, V>[] data, K key, V value) {
+        int index = getBucketIndex(key, data.length);
+
+        if (data[index] == null) {
+            data[index] = new CustomEntry<>(key, value);
+            return data[index];
+        }
+
+        CustomEntry<K, V> current = findBucketEntryWithTheSameKey(key, index);
+
+        if (Objects.isNull(current)) {
+            current = new CustomEntry<>(key, value);
+            current.setNext(data[index]);
+            data[index] = current;
+            return data[index];
+        } else {
+            current.setValue(value);
+            return null;
+        }
     }
 
     /**
@@ -207,17 +260,17 @@ public class CustomHashMap<K, V> implements Map<K, V> {
     // ---------- Auxiliary and non-public methods ----------
     //
 
-    private int getBucketIndex(K key) {
+    private int getBucketIndex(K key, int capacity) {
         int hashcode = key.hashCode();
         hashcode = hashcode & 0x7fffffff;
-        return hashcode % buckets.length;
+        return hashcode % capacity;
     }
 
     private CustomEntry<K, V> removeEntryByKey(Object o) {
 
         K key = (K) o;
 
-        int index = getBucketIndex(key);
+        int index = getBucketIndex(key, buckets.length);
 
         if (Objects.isNull(buckets[index])) {
             return null;

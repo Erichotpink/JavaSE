@@ -672,5 +672,9 @@ public class CustomHashMapTest {
         assertThat(m.size(), is(1));
     }
 
-
+    @Test (expected = IllegalArgumentException.class)
+    public void shouldThrowExceptionIfInitialCapacityLessOne() {
+        System.out.println(1 << 30);
+        new CustomHashMap<>(0);
+    }
 }
