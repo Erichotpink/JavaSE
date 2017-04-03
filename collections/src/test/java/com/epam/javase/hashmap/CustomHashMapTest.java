@@ -674,7 +674,27 @@ public class CustomHashMapTest {
 
     @Test (expected = IllegalArgumentException.class)
     public void shouldThrowExceptionIfInitialCapacityLessOne() {
-        System.out.println(1 << 30);
         new CustomHashMap<>(0);
+    }
+
+    @Test (expected = IllegalArgumentException.class)
+    public void shouldThrowExceptionIfThresholdTooLow() {
+        new CustomHashMap<>(10, -1);
+    }
+
+    @Test (expected = IllegalArgumentException.class)
+    public void shouldThrowExceptionIfThresholdTooHigh() {
+        new CustomHashMap<>(10, 0.99);
+    }
+
+    @Test
+    public void testContainsMethodAfterBulkInsertion() {
+        for (int i = 0; i < 1000; i++) {
+            m.put(new Integer(i), null);
+        }
+
+        for (int i = 0; i < 1000; i++) {
+            assertTrue(m.containsKey(new Integer(i)));
+        }
     }
 }

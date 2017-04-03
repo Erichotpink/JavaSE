@@ -46,12 +46,26 @@ public class CustomHashMap<K, V> implements Map<K, V> {
     }
 
     private void resizeMap() {
-        if (buckets.length >= MAX_CAPACITY) {
+        if (buckets.length >= MAX_CAPACITY || size <= threshold) {
             return;
         }
 
         int newCapacity = buckets.length * 2 <= MAX_CAPACITY ? buckets.length * 2 : MAX_CAPACITY;
         CustomEntry<K, V>[] newBuckets = new CustomEntry[newCapacity];
+        for (Map.Entry<K, V> entry : entrySet()) {
+            int index = getBucketIndex(entry.getKey(), newBuckets.length);
+
+            if (newBuckets[index] == null) {
+                newBuckets[index] = (CustomEntry<K, V>) entry;
+                ((CustomEntry<K, V>) entry).setNext(null);
+            } else {
+                ((CustomEntry<K, V>) entry).setNext(newBuckets[index]);
+                newBuckets[index] = (CustomEntry<K, V>) entry;
+            }
+        }
+
+        buckets = newBuckets;
+        threshold = calculateThreshold();
     }
 
 
@@ -124,6 +138,8 @@ public class CustomHashMap<K, V> implements Map<K, V> {
     public V put(K key, V value) {
         Objects.requireNonNull(key);
 
+        resizeMap();
+
         V oldValue = null;
         int index = getBucketIndex(key, buckets.length);
 
@@ -146,27 +162,6 @@ public class CustomHashMap<K, V> implements Map<K, V> {
         }
 
         return oldValue;
-    }
-
-    public CustomEntry<K, V> addEntry(CustomEntry<K, V>[] data, K key, V value) {
-        int index = getBucketIndex(key, data.length);
-
-        if (data[index] == null) {
-            data[index] = new CustomEntry<>(key, value);
-            return data[index];
-        }
-
-        CustomEntry<K, V> current = findBucketEntryWithTheSameKey(key, index);
-
-        if (Objects.isNull(current)) {
-            current = new CustomEntry<>(key, value);
-            current.setNext(data[index]);
-            data[index] = current;
-            return data[index];
-        } else {
-            current.setValue(value);
-            return null;
-        }
     }
 
     /**
@@ -228,7 +223,7 @@ public class CustomHashMap<K, V> implements Map<K, V> {
      * {@inheritDoc}
      */
     @Override
-    public Set<Entry<K, V>> entrySet() {
+    public Set<Map.Entry<K, V>> entrySet() {
         return new CustomEntrySet();
     }
 
