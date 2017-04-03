@@ -110,6 +110,42 @@ public class CustomHashMap<K, V> implements Map<K, V> {
         return null;
     }
 
+    @Override
+    public void putAll(Map<? extends K, ? extends V> m) {
+        // TO DO
+        throw new UnsupportedOperationException();
+
+    }
+
+    @Override
+    public void clear() {
+        buckets = new CustomEntry[buckets.length];
+        size = 0;
+    }
+
+    @Override
+    public Set<K> keySet() {
+        return new CustomKeySet();
+    }
+
+    @Override
+    public Collection<V> values() {
+        return null;
+    }
+
+    @Override
+    public Set<Entry<K, V>> entrySet() {
+        return new CustomEntrySet();
+    }
+
+    // Auxiliary
+
+    private int getBucketIndex(K key) {
+        int hashcode = key.hashCode();
+        hashcode = hashcode & 0x7fffffff;
+        return hashcode % buckets.length;
+    }
+
     private CustomEntry<K, V> removeEntry(Object o) {
 
         K key = (K) o;
@@ -132,44 +168,10 @@ public class CustomHashMap<K, V> implements Map<K, V> {
                     current.setNext(next.next());
                     return next;
                 }
-             }
+            }
         }
 
         return null;
-    }
-
-    @Override
-    public void putAll(Map<? extends K, ? extends V> m) {
-        // TO DO
-        throw new UnsupportedOperationException();
-
-    }
-
-    @Override
-    public void clear() {
-        buckets = new CustomEntry[buckets.length];
-        size = 0;
-    }
-
-    @Override
-    public Set<K> keySet() {
-        return new CustomKeySet<>();
-    }
-
-    @Override
-    public Collection<V> values() {
-        return null;
-    }
-
-    @Override
-    public Set<Entry<K, V>> entrySet() {
-        return new CustomEntrySet();
-    }
-
-    private int getBucketIndex(K key) {
-        int hashcode = key.hashCode();
-        hashcode = hashcode & 0x7fffffff;
-        return hashcode % buckets.length;
     }
 
     private CustomEntry<K, V> findBucketEntryWithTheSameKey(K key, int index) {
@@ -226,9 +228,27 @@ public class CustomHashMap<K, V> implements Map<K, V> {
         public void setNext(CustomEntry<K, V> next) {
             this.next = next;
         }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+
+            CustomEntry<?, ?> that = (CustomEntry<?, ?>) o;
+
+            if (!key.equals(that.key)) return false;
+            return value != null ? value.equals(that.value) : that.value == null;
+        }
+
+        @Override
+        public int hashCode() {
+            int result = key.hashCode();
+            result = 31 * result + (value != null ? value.hashCode() : 0);
+            return result;
+        }
     }
 
-    final class CustomKeySet<K> extends AbstractSet<K> {
+    final class CustomKeySet extends AbstractSet<K> {
 
         @Override
         public boolean add(K o) {
@@ -259,70 +279,11 @@ public class CustomHashMap<K, V> implements Map<K, V> {
         }
     }
 
-    final class KeyIterator implements Iterator {
-
-        private CustomEntry<K, V> current = null;
-        private CustomEntry<K, V> next = null;
-        private CustomEntry<K, V>[] data = buckets;
-
-        private int index = 0;
-
-        public KeyIterator() {
-            for (;index < data.length && data[index] == null; index++);
-
-            if (index < data.length) {
-                next = data[index];
-            }
-        }
-
-        @Override
-        public boolean hasNext() {
-            return next != null;
-        }
-
-        private CustomEntry<K, V> getEntry() {
-
-            if (index >= data.length) {
-                throw new NoSuchElementException();
-            }
-
-            current = next;
-
-            if (next.next() != null) {
-                next = next.next();
-            } else {
-                for (++index; index < data.length && data[index] == null; index++);
-
-                if (index < data.length) {
-                    next = data[index];
-                } else {
-                    next = null;
-                }
-            }
-
-            return current;
-        }
-
-        @Override
-        public K next() {
-            return getEntry().getKey();
-        }
-
-        @Override
-        public void remove() {
-            if (Objects.isNull(current)) {
-                throw new IllegalStateException();
-            }
-            CustomHashMap.this.remove(current.getKey());
-            current = null;
-        }
-    }
-
     final class CustomEntrySet extends AbstractSet<Map.Entry<K, V>> {
 
         @Override
         public Iterator<Map.Entry<K, V>> iterator() {
-            return null;
+            return new EntryIterator();
         }
 
         @Override
@@ -351,7 +312,71 @@ public class CustomHashMap<K, V> implements Map<K, V> {
         }
     }
 
+    abstract class CommonIterator {
 
+        private CustomEntry<K, V> current = null;
+        private CustomEntry<K, V> next = null;
+        private CustomEntry<K, V>[] data = buckets;
+        private int index = 0;
+
+        public CommonIterator() {
+            for (;index < data.length && data[index] == null; index++);
+
+            if (index < data.length) {
+                next = data[index];
+            }
+        }
+
+        public final boolean hasNext() {
+            return next != null;
+        }
+
+        final CustomEntry<K, V> getEntry() {
+
+            if (index >= data.length) {
+                throw new NoSuchElementException();
+            }
+
+            current = next;
+
+            if (next.next() != null) {
+                next = next.next();
+            } else {
+                for (++index; index < data.length && data[index] == null; index++);
+
+                if (index < data.length) {
+                    next = data[index];
+                } else {
+                    next = null;
+                }
+            }
+
+            return current;
+        }
+
+        public final void remove() {
+            if (Objects.isNull(current)) {
+                throw new IllegalStateException();
+            }
+            CustomHashMap.this.remove(current.getKey());
+            current = null;
+        }
+
+    }
+
+    final class KeyIterator extends CommonIterator implements Iterator<K> {
+        @Override
+        public K next() {
+            return getEntry().getKey();
+        }
+    }
+
+    final class EntryIterator extends CommonIterator implements Iterator<Map.Entry<K, V>> {
+        @Override
+        public Map.Entry<K, V> next() {
+            return getEntry();
+        }
+    }
 
     public static void main(String[] args) {
         CustomHashMap<Integer, String> m = new CustomHashMap<>();
