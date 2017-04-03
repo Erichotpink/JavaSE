@@ -24,9 +24,15 @@ public class CustomHashMapTest {
     private Map<Integer, String> m;
     private Set<Integer> keySet;
     private Set<Map.Entry<Integer, String>> entrySet;
+    private Collection<String> valueSet;
     private final Integer key = new Integer(1000);
     private final String value = "abc";;
-    private final Integer[] values = {100, 222, 3123, 122, 987, 0};
+    private final Integer[] values = { new Integer(100),
+                                       new Integer(222),
+                                       new Integer(3123),
+                                       new Integer(122),
+                                       new Integer(987),
+                                       new Integer(0) };
 
 
     @Before
@@ -34,6 +40,7 @@ public class CustomHashMapTest {
         m = new CustomHashMap<>();
         keySet = m.keySet();
         entrySet = m.entrySet();
+        valueSet = m.values();
     }
 
     @Test
@@ -190,7 +197,7 @@ public class CustomHashMapTest {
 
     @Ignore
     @Test
-    public void testMapSizeAfterAddingIntegerMaxValueKeys() {
+    public void testMapSizeAfterAddingHugeNumberOfKeys() {
         for (int i = Integer.MAX_VALUE; i > 0; i--) {
             m.put(i, value);
         }
@@ -396,15 +403,14 @@ public class CustomHashMapTest {
         assertThat(m.entrySet().size(), is(0));
     }
 
-    @Ignore
     @Test
     public void testIfEntrySetAndMapContainSameValues() {
         for (Integer i : values) {
             m.put(i, null);
         }
 
-        for (Integer i : keySet) {
-            assertTrue(m.containsKey(i));
+        for (Map.Entry<Integer, String> e : entrySet) {
+            assertThat(m.get(e.getKey()), is(e.getValue()));
         }
     }
 
@@ -433,38 +439,39 @@ public class CustomHashMapTest {
         assertTrue(m.isEmpty());
     }
 
-    @Ignore
     @Test
     public void testIfEntrySetRemoveMethodTrulyRemoveElementFromMap() {
         for (Integer i : values) {
             m.put(key, null);
         }
 
-        for (Integer i : values) {
-            keySet.remove(key);
-            assertFalse(m.containsKey(key));
-        }
+        Iterator<Map.Entry<Integer, String>> it = entrySet.iterator();
+        Map.Entry<Integer, String> e  = it.next();
+        it.remove();
+
+        assertFalse(m.containsKey(e.getKey()));
     }
 
     @Test(expected = NullPointerException.class)
     public void testIfEntrySetRemoveMethodThrowsExceptionOnNullKey() {
-        keySet.remove(null);
+        entrySet.remove(null);
     }
 
-    @Ignore
     @Test
     public void testIfEntrySetRemoveMethodReturnTrueOnSuccess() {
-        m.put(key, null);
-        assertTrue(keySet.remove(key));
+        m.put(key, "abc");
+
+        Iterator<Map.Entry<Integer, String>> it = entrySet.iterator();
+        Map.Entry<Integer, String> entry = it.next();
+
+        assertTrue(entrySet.remove(entry));
     }
 
-    @Ignore
     @Test
     public void testIfEntrySetRemoveMethodReturnFalseIfMapDoesntContainSuchKey() {
-        assertFalse(keySet.remove(key));
+        assertFalse(entrySet.remove(key));
     }
 
-    @Ignore
     @Test
     public void testIfEntrySetRemoveAllMethodTrulyRemoveElementsFromMap() {
 
@@ -472,11 +479,9 @@ public class CustomHashMapTest {
             m.put(i, null);
         }
 
-        entrySet.removeAll(Arrays.asList(values));
+        entrySet.removeAll(m.entrySet());
 
-        for (Integer i : values) {
-            assertFalse(m.containsKey(i));
-        }
+        assertTrue(m.isEmpty());
     }
 
     @Test(expected = NullPointerException.class)
@@ -484,22 +489,25 @@ public class CustomHashMapTest {
         entrySet.removeAll(null);
     }
 
-    @Ignore
+
     @Test
     public void testIfEntrySetRemoveAllMethodReturnTrueOnSuccess() {
-        m.put(key, null);
-        assertTrue(keySet.removeAll(Collections.singleton(key)));
+        for (Integer i : values) {
+            m.put(i, null);
+        }
+
+        assertTrue(entrySet.removeAll(m.entrySet()));
     }
 
-    @Ignore
-    @Test
+     @Test
     public void testIfEntrySetRemoveAllMethodReturnFalseIfMapDoesntContainSuchKey() {
-        assertFalse(keySet.remove(key));
+        assertFalse(entrySet.removeAll(Collections.singletonList(key)));
     }
 
-    @Ignore
     @Test
     public void testIfEntrySetRetainAllMethodTrulyRemoveElementsFromMap() {
+
+        CustomHashMap<Integer, String> that = new CustomHashMap<>();
 
         int[] src = {1, 2, 3, 4, 5};
         int[] remove = {1, 2, 3};
@@ -509,10 +517,19 @@ public class CustomHashMapTest {
             m.put(i, null);
         }
 
-        keySet.retainAll(Arrays.asList(retain));
+        for (Integer i : retain) {
+            that.put(i, null);
+        }
+
+
+        entrySet.retainAll(that.entrySet());
 
         for (Integer i : remove) {
             assertFalse(m.containsKey(i));
+        }
+
+        for (Integer i : retain) {
+            assertTrue(m.containsKey(i));
         }
     }
 
@@ -608,6 +625,52 @@ public class CustomHashMapTest {
         assertTrue(m.size() == 2);
     }
 
+    @Test(expected = UnsupportedOperationException.class)
+    public void testIfValueSetAddMethodThrowsExceptionOnAdd() {
+        valueSet.add("a");
+    }
+
+    @Test(expected = UnsupportedOperationException.class)
+    public void testIfValueSetAddAllMethodThrowsExceptionOnAdd() {
+        valueSet.addAll(Collections.singletonList("a"));
+    }
+
+    @Test
+    public void testIfValueSetSizeReturnZeroOnEmptyMap() {
+        assertThat(valueSet.size(), is(0));
+    }
+
+    @Test
+    public void testIfValueSetSizeEqualsToMapSize() {
+        for (Integer i : values) {
+            m.put(i, null);
+        }
+
+        assertThat(valueSet.size(), is(m.size()));
+    }
+
+    @Test
+    public void testIfValueSetContainsWorksAsExpected() {
+        m.put(100, "abc");
+        m.put(200, null);
+
+        assertTrue(valueSet.contains("abc"));
+        assertTrue(valueSet.contains(null));
+    }
+
+    @Test
+    public void testIfValueSetIteratorRemoveMethodTrulyRemoveElementFromMap() {
+
+        m.put(100, "abc");
+        m.put(200, "cba");
+
+
+        Iterator<String> it = valueSet.iterator();
+        it.next();
+        it.remove();
+
+        assertThat(m.size(), is(1));
+    }
 
 
 }

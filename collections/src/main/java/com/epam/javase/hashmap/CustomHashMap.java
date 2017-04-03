@@ -1,6 +1,7 @@
 package com.epam.javase.hashmap;
 
 import java.util.*;
+import java.util.function.Consumer;
 
 /**
  * Created by aivanov on 3/24/2017.
@@ -21,16 +22,26 @@ public class CustomHashMap<K, V> implements Map<K, V> {
         buckets = new CustomEntry[capacity];
     }
 
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public int size() {
         return size > Integer.MAX_VALUE ? Integer.MAX_VALUE : (int) size;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean isEmpty() {
         return size == 0;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean containsKey(Object o) {
         Objects.requireNonNull(o);
@@ -40,6 +51,9 @@ public class CustomHashMap<K, V> implements Map<K, V> {
         return findBucketEntryWithTheSameKey(key, index) != null;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean containsValue(Object o) {
         V value = (V) o;
@@ -52,6 +66,9 @@ public class CustomHashMap<K, V> implements Map<K, V> {
         return false;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public V get(Object o) {
         Objects.requireNonNull(o);
@@ -68,6 +85,9 @@ public class CustomHashMap<K, V> implements Map<K, V> {
         return null;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public V put(K key, V value) {
         Objects.requireNonNull(key);
@@ -96,11 +116,14 @@ public class CustomHashMap<K, V> implements Map<K, V> {
         return oldValue;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public V remove(Object o) {
         Objects.requireNonNull(o);
 
-        CustomEntry<K, V> entry = removeEntry(o);
+        CustomEntry<K, V> entry = removeEntryByKey(o);
 
         if (Objects.nonNull(entry)) {
             size--;
@@ -110,6 +133,9 @@ public class CustomHashMap<K, V> implements Map<K, V> {
         return null;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void putAll(Map<? extends K, ? extends V> m) {
 
@@ -120,27 +146,42 @@ public class CustomHashMap<K, V> implements Map<K, V> {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void clear() {
         buckets = new CustomEntry[buckets.length];
         size = 0;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Set<K> keySet() {
         return new CustomKeySet();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Collection<V> values() {
-        return null;
+        return new CustomValueSet();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Set<Entry<K, V>> entrySet() {
         return new CustomEntrySet();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -152,6 +193,9 @@ public class CustomHashMap<K, V> implements Map<K, V> {
         return this.entrySet().equals(that.entrySet());
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public int hashCode() {
         int result = Arrays.hashCode(buckets);
@@ -169,7 +213,7 @@ public class CustomHashMap<K, V> implements Map<K, V> {
         return hashcode % buckets.length;
     }
 
-    private CustomEntry<K, V> removeEntry(Object o) {
+    private CustomEntry<K, V> removeEntryByKey(Object o) {
 
         K key = (K) o;
 
@@ -206,7 +250,9 @@ public class CustomHashMap<K, V> implements Map<K, V> {
     private CustomEntry<K, V> findBucketEntryWithTheSameValue(V value, int index) {
         CustomEntry<K, V> current = buckets[index];
         for (;current != null; current = current.next()) {
-            if (current.value == value || value.equals(current.value)) {
+            V v = current.getValue();
+            if ((v == null && value == null) ||
+                    (v != null & v.equals(value))) {
                 return current;
             }
         }
@@ -225,7 +271,7 @@ public class CustomHashMap<K, V> implements Map<K, V> {
 
         @Override
         public boolean hasNext() {
-            return false;
+            return next != null;
         }
 
         @Override
@@ -298,7 +344,8 @@ public class CustomHashMap<K, V> implements Map<K, V> {
 
         @Override
         public boolean remove(Object key) {
-            return CustomHashMap.this.removeEntry(key) != null;
+            Objects.requireNonNull(key);
+            return CustomHashMap.this.removeEntryByKey(key) != null;
         }
     }
 
@@ -325,14 +372,56 @@ public class CustomHashMap<K, V> implements Map<K, V> {
         }
 
         @Override
-        public boolean remove(Object key) {
-            return CustomHashMap.this.removeEntry(key) != null;
+        public boolean remove(Object o) {
+
+            Objects.requireNonNull(o);
+
+            if (o instanceof Map.Entry) {
+                Map.Entry<K, V> entry = (Map.Entry<K, V>) o;
+                K key = entry.getKey();
+                V value = entry.getValue();
+                if (CustomHashMap.this.containsKey(key) &&
+                        CustomHashMap.this.get(key).equals(value)) {
+                    return CustomHashMap.this.removeEntryByKey(key) != null;
+                }
+            }
+            return false;
         }
 
         @Override
         public void clear() {
             CustomHashMap.this.clear();
         }
+    }
+
+    final class CustomValueSet extends AbstractCollection<V> {
+
+        @Override
+        public boolean add(V o) {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public boolean addAll(Collection<? extends V> c) {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public void clear() {
+            CustomHashMap.this.clear();
+        }
+
+        @Override
+        public Iterator<V> iterator() {return new ValueIterator();}
+
+        @Override
+        public int size() {
+            return CustomHashMap.this.size();
+        }
+
+        @Override
+        public final boolean contains(Object o) { return containsValue(o); }
+
     }
 
     abstract class CommonIterator {
@@ -401,15 +490,10 @@ public class CustomHashMap<K, V> implements Map<K, V> {
         }
     }
 
-    public static void main(String[] args) {
-        CustomHashMap<Integer, String> m = new CustomHashMap<>();
-        for (int i = 0; i < 17; i++) {
-            m.put(i, null);
+    final class ValueIterator extends CommonIterator implements Iterator<V> {
+        @Override
+        public V next() {
+            return getEntry().getValue();
         }
-
-        Set<Integer> set = m.keySet();
-        Iterator<Integer> it = set.iterator();
-
-        set.stream().forEach(System.out::println);
     }
 }
