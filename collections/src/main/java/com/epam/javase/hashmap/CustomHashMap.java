@@ -41,34 +41,6 @@ public class CustomHashMap<K, V> implements Map<K, V> {
         threshold = calculateThreshold();
     }
 
-    private int calculateThreshold() {
-        return (int) (buckets.length * loadFactor);
-    }
-
-    private void resizeMap() {
-        if (buckets.length >= MAX_CAPACITY || size <= threshold) {
-            return;
-        }
-
-        int newCapacity = buckets.length * 2 <= MAX_CAPACITY ? buckets.length * 2 : MAX_CAPACITY;
-        CustomEntry<K, V>[] newBuckets = new CustomEntry[newCapacity];
-        for (Map.Entry<K, V> entry : entrySet()) {
-            int index = getBucketIndex(entry.getKey(), newBuckets.length);
-
-            if (newBuckets[index] == null) {
-                newBuckets[index] = (CustomEntry<K, V>) entry;
-                ((CustomEntry<K, V>) entry).setNext(null);
-            } else {
-                ((CustomEntry<K, V>) entry).setNext(newBuckets[index]);
-                newBuckets[index] = (CustomEntry<K, V>) entry;
-            }
-        }
-
-        buckets = newBuckets;
-        threshold = calculateThreshold();
-    }
-
-
     /**
      * {@inheritDoc}
      */
@@ -254,6 +226,33 @@ public class CustomHashMap<K, V> implements Map<K, V> {
     //
     // ---------- Auxiliary and non-public methods ----------
     //
+
+    private int calculateThreshold() {
+        return (int) (buckets.length * loadFactor);
+    }
+
+    private void resizeMap() {
+        if (buckets.length >= MAX_CAPACITY || size <= threshold) {
+            return;
+        }
+
+        int newCapacity = (buckets.length * 2 <= MAX_CAPACITY) ? buckets.length * 2 : MAX_CAPACITY;
+        CustomEntry<K, V>[] newBuckets = new CustomEntry[newCapacity];
+        for (Map.Entry<K, V> entry : entrySet()) {
+            int index = getBucketIndex(entry.getKey(), newBuckets.length);
+
+            if (newBuckets[index] == null) {
+                newBuckets[index] = (CustomEntry<K, V>) entry;
+                ((CustomEntry<K, V>) entry).setNext(null);
+            } else {
+                ((CustomEntry<K, V>) entry).setNext(newBuckets[index]);
+                newBuckets[index] = (CustomEntry<K, V>) entry;
+            }
+        }
+
+        buckets = newBuckets;
+        threshold = calculateThreshold();
+    }
 
     private int getBucketIndex(K key, int capacity) {
         int hashcode = key.hashCode();
