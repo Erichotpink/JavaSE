@@ -180,7 +180,41 @@ public class CustomListsTest {
         }
     }
 
+    @Test
+    public void testIfAddReturnTrueOnSuccess() {
+        assertTrue(list.add(null));
+    }
 
+    @Test
+    public void testIfRemoveReturnTrueOnSuccess() {
+        list.add("aaa");
+        assertTrue(list.remove("aaa"));
+    }
 
+    @Test
+    public void testIfRemoveReturnFalseOnFail() {
+        list.add("bbb");
+        assertFalse(list.remove("aaa"));
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void testIfContainsAllThrowsExceptionOnNullArgument() {
+        list.containsAll(null);
+    }
+
+    @Test
+    public void testIfContainsAllReturnTrueOnSuccess() {
+        for (String s : values) {
+            list.add(s);
+        }
+
+        assertTrue(list.containsAll(Arrays.asList(values)));
+    }
+
+    @Test
+    public void testIfContainsAllReturnFalseOnFail() {
+        list.add(values[0]);
+        assertFalse(list.containsAll(Arrays.asList(values)));
+    }
 
 }

@@ -59,7 +59,7 @@ public class CustomArrayList<T> implements List<T> {
             data = Arrays.copyOf(data, newLength);
         }
         data[size++] = t;
-        return false;
+        return true;
     }
 
     @Override
@@ -75,7 +75,15 @@ public class CustomArrayList<T> implements List<T> {
 
     @Override
     public boolean containsAll(Collection<?> c) {
-        return false;
+        Objects.requireNonNull(c);
+
+        for (Object element : c) {
+            if (!contains(element)) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     @Override

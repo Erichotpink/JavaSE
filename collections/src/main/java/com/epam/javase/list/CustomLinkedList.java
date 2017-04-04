@@ -1,9 +1,6 @@
 package com.epam.javase.list;
 
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
-import java.util.ListIterator;
+import java.util.*;
 
 /**
  * Created by aivanov on 4/4/2017.
@@ -70,7 +67,7 @@ public class CustomLinkedList<T> implements List<T> {
         }
         iterator.next = new Node<>(t);
         size++;
-        return false;
+        return true;
     }
 
     @Override
@@ -91,7 +88,15 @@ public class CustomLinkedList<T> implements List<T> {
 
     @Override
     public boolean containsAll(Collection<?> c) {
-        return false;
+        Objects.requireNonNull(c);
+
+        for (Object element : c) {
+            if (!contains(element)) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     @Override
