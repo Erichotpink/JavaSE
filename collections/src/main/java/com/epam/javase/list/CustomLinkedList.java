@@ -117,7 +117,14 @@ public class CustomLinkedList<T> implements List<T> {
 
     @Override
     public boolean removeAll(Collection<?> c) {
-        return false;
+        boolean isModified = false;
+
+        for (Object o : c) {
+            if (remove(o)) {
+                isModified = true;
+            }
+        }
+        return isModified;
     }
 
     @Override

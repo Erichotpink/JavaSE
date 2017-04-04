@@ -233,4 +233,48 @@ public class CustomListsTest {
         }
     }
 
+
+    @Test(expected = NullPointerException.class)
+    public void testIfRemoveAllThrowsExceptionOnNullArgument() {
+        list.removeAll(null);
+    }
+
+    @Test
+    public void testIfRemoveTrulyRemoveOnlyOneInstanceOfElement() {
+        list.add("aaa");
+        list.add("aaa");
+        list.add("aaa");
+        list.add("aaa");
+
+        list.remove("aaa");
+
+        assertTrue(list.contains("aaa"));
+        assertThat(list.size(), is(3));
+    }
+
+    @Test
+    public void testIfRemoveAllRemoveOnlyExistedElements() {
+        String[] init = {"a1", "a2", "a3"};
+        String[] toRemove = {"a2", "a3", "a4"};
+
+        list.addAll(Arrays.asList(init));
+        list.removeAll(Arrays.asList(toRemove));
+
+        assertTrue(list.contains("a1"));
+        assertThat(list.size(), is(1));
+
+    }
+
+    @Test
+    public void testIfRemoveAllReturnTrueOnSuccess() {
+        list.add("aaa");
+        assertTrue(list.removeAll(Collections.nCopies(10, "aaa")));
+    }
+
+    @Test
+    public void testIfRemoveAllReturnFalseOnFail() {
+        list.add("aaa");
+        assertFalse(list.removeAll(Collections.singleton("bbb")));
+    }
+
 }
