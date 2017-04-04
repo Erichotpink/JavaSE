@@ -101,7 +101,13 @@ public class CustomLinkedList<T> implements List<T> {
 
     @Override
     public boolean addAll(Collection<? extends T> c) {
-        return false;
+        boolean isModified = false;
+
+        for (T o : c) {
+            add(o);
+            isModified = true;
+        }
+        return isModified;
     }
 
     @Override

@@ -217,4 +217,20 @@ public class CustomListsTest {
         assertFalse(list.containsAll(Arrays.asList(values)));
     }
 
+    @Test
+    public void testIfAddAllTrulyAddElementsToTheEnd() {
+        String[] toAdd = {"s1", "s2", "s3"};
+        for (String s : values) {
+            list.add(s);
+        }
+
+        int size = list.size();
+
+        list.addAll(Arrays.asList(toAdd));
+
+        for (int i = 0; i < toAdd.length; i++) {
+            assertThat(list.get(size + i), equalTo(toAdd[i]));
+        }
+    }
+
 }
