@@ -487,4 +487,28 @@ public class CustomListsTest {
 
         assertThat(list.size(), is(size + 1));
     }
+
+    @Test
+    public void testIfIndexOfReturnNegativeValueIfListDoesntContainElement() {
+        assertTrue(list.indexOf("aaa") < 0);
+    }
+
+    @Test
+    public void testIfIndexOfReturnIndexOfTheFirstFoundElement() {
+        list.add("aaa");
+        list.add("bbb");
+        list.add("ccc");
+        list.add("ddd");
+
+        assertThat(list.indexOf("aaa"), is (0));
+    }
+
+    @Test
+    public void testIfIndexOfReturnIndexOfNullElement() {
+        list.add("aaa");
+        list.add(null);
+        list.add(null);
+
+        assertThat(list.indexOf(null), is (1));
+    }
 }
