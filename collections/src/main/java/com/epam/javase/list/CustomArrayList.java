@@ -199,6 +199,32 @@ public class CustomArrayList<T> implements List<T> {
         return null;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || !(o instanceof List)) return false;
+
+        List that = (List) o;
+
+        if (that.size() != size()) return false;
+
+        for (int i = 0; i < size; i++) {
+            if ((get(i) == null && that.get(i) != null) || !get(i).equals(that.get(i))) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int hashCode = 1;
+        for (T e : this)
+            hashCode = 31*hashCode + (e==null ? 0 : e.hashCode());
+        return hashCode;
+    }
+
     final class AListIterator implements Iterator<T> {
 
         int current = -1;

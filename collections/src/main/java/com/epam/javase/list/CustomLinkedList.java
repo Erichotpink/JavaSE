@@ -1,6 +1,8 @@
 package com.epam.javase.list;
 
+import java.awt.*;
 import java.util.*;
+import java.util.List;
 
 /**
  * Created by aivanov on 4/4/2017.
@@ -216,6 +218,32 @@ public class CustomLinkedList<T> implements List<T> {
             current = current.next;
         }
         return current;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || !(o instanceof List)) return false;
+
+        List that = (List) o;
+
+        if (that.size() != size()) return false;
+
+        for (int i = 0; i < size; i++) {
+            if ((get(i) == null && that.get(i) != null) || !get(i).equals(that.get(i))) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int hashCode = 1;
+        for (T e : this)
+            hashCode = 31*hashCode + (e==null ? 0 : e.hashCode());
+        return hashCode;
     }
 
     private class Node<T> {

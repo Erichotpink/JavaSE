@@ -387,4 +387,22 @@ public class CustomListsTest {
         assertThat(list.size(), is(retain.length + 1));
         assertTrue(list.containsAll(Arrays.asList(retain)));
     }
+
+    @Test
+    public void testIfEqualReturnTrueOnSuccess() {
+        list.addAll(Arrays.asList(values));
+
+        List that = Arrays.asList(values);
+
+        assertTrue(list.equals(that));
+    }
+
+    @Test
+    public void testIfEqualReturnFalseOnFail() {
+        list.addAll(Arrays.asList(values));
+
+        List that = Collections.singletonList("aaa");
+
+        assertFalse(list.equals(that));
+    }
 }
