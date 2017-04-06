@@ -39,7 +39,7 @@ public class CustomArrayList<T> implements List<T> {
 
     @Override
     public Iterator<T> iterator() {
-        return null;
+        return new AListIterator();
     }
 
     @Override
@@ -105,13 +105,18 @@ public class CustomArrayList<T> implements List<T> {
 
     @Override
     public boolean removeAll(Collection<?> c) {
+        Objects.requireNonNull(c);
+
         boolean isModified = false;
 
-        for (Object o : c) {
-            if (remove(o)) {
+        Iterator it = iterator();
+        while (it.hasNext()) {
+            if (c.contains(it.next())) {
+                it.remove();
                 isModified = true;
             }
         }
+
         return isModified;
     }
 
@@ -180,5 +185,39 @@ public class CustomArrayList<T> implements List<T> {
     @Override
     public List<T> subList(int fromIndex, int toIndex) {
         return null;
+    }
+
+    final class AListIterator implements Iterator<T> {
+
+        int current = -1;
+        int next = 0;
+
+        @Override
+        public boolean hasNext() {
+            return next < size();
+        }
+
+        @Override
+        public T next() {
+            if (next >= size()) {
+                throw new NoSuchElementException();
+            }
+
+            current = next;
+            next++;
+
+            return get(current);
+        }
+
+        @Override
+        public void remove() {
+            if (current < 0) {
+                throw new IllegalStateException();
+            }
+
+            CustomArrayList.this.remove(current);
+            current = -1;
+            next--;
+        }
     }
 }

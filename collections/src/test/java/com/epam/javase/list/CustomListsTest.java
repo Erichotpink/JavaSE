@@ -9,6 +9,7 @@ import java.util.*;
 
 import static junit.framework.TestCase.assertFalse;
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.junit.Assert.assertTrue;
@@ -253,6 +254,17 @@ public class CustomListsTest {
     }
 
     @Test
+    public void testRemoveBoundaryElements() {
+        list.add("aaa");
+        list.add("bbb");
+        list.add("ccc");
+
+        assertThat(list.remove(2), equalTo("ccc"));
+        assertThat(list.remove(0), equalTo("aaa"));
+        assertThat(list.size(), is(1));
+    }
+
+    @Test
     public void testIfRemoveAllRemoveOnlyExistedElements() {
         String[] init = {"a1", "a2", "a3"};
         String[] toRemove = {"a2", "a3", "a4"};
@@ -277,4 +289,90 @@ public class CustomListsTest {
         assertFalse(list.removeAll(Collections.singleton("bbb")));
     }
 
+    @Test
+    public void testIfRemoveAllRemoveAllInstancesOfEqualsElements() {
+        list.add("aaa");
+        list.add("aaa");
+        list.add("aaa");
+        list.add("aaa");
+
+        list.removeAll(Collections.singleton("aaa"));
+        assertTrue(list.isEmpty());
+    }
+
+    @Test
+    public void testIfIteratorHasNextReturnFalseOnEmptyList() {
+        assertFalse(list.iterator().hasNext());
+    }
+
+    @Test
+    public void testIfIteratorHasNextReturnTrueOnNonEmptyList() {
+        list.add("aaa");
+
+        for (int i = 0; i < 10; i++) {
+            assertTrue(list.iterator().hasNext());
+        }
+    }
+
+    @Test
+    public void testIfIteratorNextReturnNextOnNonEmptyList() {
+        list.add("aaa");
+
+        assertThat(list.iterator().next(), equalTo("aaa"));
+    }
+
+    @Test(expected = NoSuchElementException.class)
+    public void testIfIteratorNextThrowsExceptionOnEmptyList() {
+
+        Iterator it = list.iterator();
+        it.next();
+    }
+
+    @Test(expected = NoSuchElementException.class)
+    public void testIfIteratorNextThrowsExceptionOnMultipleInvocation() {
+        list.add("aaa");
+
+        Iterator it = list.iterator();
+        it.next();
+        it.next();
+        it.next();
+    }
+
+    @Test
+    public void testIfIteratorRemoveWorksAsExpected() {
+        list.add("aaa");
+
+        Iterator it = list.iterator();
+
+        it.next();
+        it.remove();
+        assertTrue(list.isEmpty());
+    }
+
+    @Test(expected = IllegalStateException.class)
+    public void testIfIteratorRemoveThrowsExceptionOnWrongInvocation() {
+        list.add("aaa");
+
+        Iterator it = list.iterator();
+        it.remove();
+    }
+
+    @Test
+    public void testListIteratorKeepsRightOrderAndRemoveAllElementsByIterator() {
+
+        String[] temp = {"aaa", "bbb", "ccc"};
+
+        list.addAll(Arrays.asList(temp));
+
+        Iterator it = list.iterator();
+        int i = 0;
+
+        while(it.hasNext()) {
+            assertThat(it.next(), equalTo(temp[i]));
+            it.remove();
+            i++;
+        }
+
+        assertTrue(list.isEmpty());
+    }
 }

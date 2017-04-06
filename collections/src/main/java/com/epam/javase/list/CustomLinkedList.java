@@ -38,7 +38,7 @@ public class CustomLinkedList<T> implements List<T> {
 
     @Override
     public Iterator<T> iterator() {
-        return null;
+        return new LListIterator();
     }
 
     @Override
@@ -117,13 +117,18 @@ public class CustomLinkedList<T> implements List<T> {
 
     @Override
     public boolean removeAll(Collection<?> c) {
+        Objects.requireNonNull(c);
+
         boolean isModified = false;
 
-        for (Object o : c) {
-            if (remove(o)) {
+        Iterator it = iterator();
+        while (it.hasNext()) {
+            if (c.contains(it.next())) {
+                it.remove();
                 isModified = true;
             }
         }
+
         return isModified;
     }
 
@@ -155,10 +160,11 @@ public class CustomLinkedList<T> implements List<T> {
 
     @Override
     public T remove(int index) {
-        Node<T> current = getNodeByIndex(index - 1);
+
+        Node<T> prev = getNodeByIndex(index - 1);
         size--;
-        T value = current.next.value;
-        current.next = current.next.next;
+        T value = prev.next.value;
+        prev.next = prev.next.next;
         return value;
     }
 
@@ -189,12 +195,12 @@ public class CustomLinkedList<T> implements List<T> {
 
     private Node<T> getNodeByIndex(int index) {
 
-        if (index < 0 || index >= size) {
+        if (index < -1 || index >= size) {
             throw new IndexOutOfBoundsException();
         }
 
-        Node<T> current = head.next;
-        for (int i = 0; i < index; i++) {
+        Node<T> current = head;
+        for (int i = 0; i <= index; i++) {
             current = current.next;
         }
         return current;
@@ -213,5 +219,53 @@ public class CustomLinkedList<T> implements List<T> {
             return next != null;
         }
 
+    }
+
+    final class LListIterator implements Iterator<T> {
+
+        int current = -1;
+        int next = 0;
+
+        @Override
+        public boolean hasNext() {
+            return next < size();
+        }
+
+        @Override
+        public T next() {
+            if (next >= size()) {
+                throw new NoSuchElementException();
+            }
+
+            current = next;
+            next++;
+
+            return get(current);
+        }
+
+        @Override
+        public void remove() {
+            if (current < 0) {
+                throw new IllegalStateException();
+            }
+
+            CustomLinkedList.this.remove(current);
+            current = -1;
+            next--;
+        }
+    }
+
+    public static void main(String[] args) {
+        List<String> list = new CustomLinkedList<>();
+        list.add("a");
+        list.add("b");
+        list.add("c");
+
+        Iterator<String> it = list.iterator();
+        while (it.hasNext()) {
+            System.out.println(it.next());
+            it.remove();
+        }
+        System.out.println("Size: " + list.size());
     }
 }
