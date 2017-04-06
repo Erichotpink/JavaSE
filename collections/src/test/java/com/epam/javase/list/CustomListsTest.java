@@ -10,6 +10,7 @@ import java.util.*;
 import static junit.framework.TestCase.assertFalse;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.junit.Assert.assertTrue;
@@ -413,5 +414,33 @@ public class CustomListsTest {
 
         assertThat(list.get(0), equalTo(values[0]));
         assertThat(list.get(last), equalTo(values[last]));
+    }
+
+    @Test
+    public void testIfSetByIndexTrulySetNewValue() {
+        list.addAll(Arrays.asList(values));
+
+        list.set(2, "aaa");
+        assertThat(list.get(2), equalTo("aaa"));
+    }
+
+    @Test
+    public void testIfWeCanSetNullBySetByIndex() {
+        list.addAll(Arrays.asList(values));
+
+        list.set(2, null);
+        assertThat(list.get(2), nullValue());
+    }
+
+    @Test(expected = IndexOutOfBoundsException.class)
+    public void testIfSetByIndexCheckIndexBounds() {
+        list.set(1000, "aaa");
+    }
+
+    @Test
+    public void testIfSetByIndexReturnPrevValue() {
+        list.addAll(Arrays.asList(values));
+
+        assertThat(list.set(2, null), equalTo(values[2]));
     }
 }

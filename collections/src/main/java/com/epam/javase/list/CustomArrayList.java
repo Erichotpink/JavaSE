@@ -153,7 +153,19 @@ public class CustomArrayList<T> implements List<T> {
 
     @Override
     public T set(int index, T element) {
-        return null;
+        checkBounds(index);
+
+        T prevValue = (T) data[index];
+
+        data[index] = element;
+
+        return prevValue;
+    }
+
+    private void checkBounds(int index) {
+        if (index < 0 || index >= size) {
+            throw new IndexOutOfBoundsException("The specified value is out of the range 0 - " + data.length + "(exclusive)");
+        }
     }
 
     @Override
@@ -163,9 +175,8 @@ public class CustomArrayList<T> implements List<T> {
 
     @Override
     public T remove(int index) {
-        if (index < 0 || index >= size) {
-            throw new IndexOutOfBoundsException("The specified value is out of the range 0 - " + data.length + "(exclusive)");
-        }
+
+        checkBounds(index);
 
         int length = data.length - index;
         T value = (T) data[index];

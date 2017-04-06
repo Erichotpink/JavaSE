@@ -166,7 +166,14 @@ public class CustomLinkedList<T> implements List<T> {
 
     @Override
     public T set(int index, T element) {
-        return null;
+        checkBounds(index);
+
+        Node<T> node = getNodeByIndex(index);
+        T prevValue = node.value;
+
+        node.value = element;
+
+        return prevValue;
     }
 
     @Override
