@@ -506,6 +506,8 @@ public class CustomListsTest {
     @Test
     public void testIfIndexOfReturnIndexOfNullElement() {
         list.add("aaa");
+
+        list.lastIndexOf("aaa");
         list.add(null);
         list.add(null);
 
@@ -528,5 +530,24 @@ public class CustomListsTest {
 
         assertThat(list.lastIndexOf(null), is(4));
         assertThat(list.lastIndexOf("aaa"), is(9));
+    }
+
+    @Test
+    public void testIfToArrayReturnArrayWithListElements() {
+        list.addAll(Arrays.asList(values));
+
+        String[] arr = {"aaa"};
+
+        assertThat(list.toArray(arr), equalTo(values));
+    }
+
+    @Test
+    public void testIfToArrayReturnArrayThatEndedWithNULLValue() {
+        list.addAll(Arrays.asList(values));
+
+        String[] arr = {"a", "a", "a", "a", "a", "a", "a", "a", "a", "a"};
+        arr = list.toArray(arr);
+
+        assertThat(arr[list.size()], nullValue());
     }
 }

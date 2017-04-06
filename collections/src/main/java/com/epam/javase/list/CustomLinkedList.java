@@ -1,6 +1,5 @@
 package com.epam.javase.list;
 
-import java.awt.*;
 import java.util.*;
 import java.util.List;
 
@@ -12,16 +11,25 @@ public class CustomLinkedList<T> implements List<T> {
     private Node<T> head = new Node<>(null);
     private int size = 0;
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public int size() {
         return size;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean isEmpty() {
         return !head.hasNext();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean contains(Object o) {
         Node<T> node = head;
@@ -38,11 +46,17 @@ public class CustomLinkedList<T> implements List<T> {
         return false;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Iterator<T> iterator() {
-        return new LListIterator();
+        return new CommonIterator();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Object[] toArray() {
         Object[] temp = new Object[size];
@@ -56,11 +70,35 @@ public class CustomLinkedList<T> implements List<T> {
         return temp;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public <T1> T1[] toArray(T1[] a) {
-        return null;
+    public <T> T[] toArray(T[] a) {
+        Objects.requireNonNull(a);
+
+        if (a.length < size) {
+            a = Arrays.copyOf(a, size);
+        }
+
+        Iterator<T> it = (Iterator<T>) iterator();
+        int i = 0;
+
+        while (it.hasNext()) {
+            a[i] = it.next();
+            i++;
+        }
+
+        if (a.length > size) {
+            a[size] = null;
+        }
+
+        return a;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean add(T t) {
         Node<T> iterator = head;
@@ -72,6 +110,9 @@ public class CustomLinkedList<T> implements List<T> {
         return true;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean remove(Object o) {
         Node<T> current = head.next;
@@ -88,6 +129,9 @@ public class CustomLinkedList<T> implements List<T> {
         return false;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean containsAll(Collection<?> c) {
         Objects.requireNonNull(c);
@@ -101,6 +145,9 @@ public class CustomLinkedList<T> implements List<T> {
         return true;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean addAll(Collection<? extends T> c) {
         boolean isModified = false;
@@ -112,11 +159,17 @@ public class CustomLinkedList<T> implements List<T> {
         return isModified;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean addAll(int index, Collection<? extends T> c) {
         return false;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean removeAll(Collection<?> c) {
         Objects.requireNonNull(c);
@@ -134,6 +187,9 @@ public class CustomLinkedList<T> implements List<T> {
         return isModified;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean retainAll(Collection<?> c) {
         Objects.requireNonNull(c);
@@ -151,12 +207,18 @@ public class CustomLinkedList<T> implements List<T> {
         return isModified;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void clear() {
         head = new Node<>(null);
         size = 0;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public T get(int index) {
         checkBounds(index);
@@ -164,6 +226,9 @@ public class CustomLinkedList<T> implements List<T> {
         return getNodeByIndex(index).value;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public T set(int index, T element) {
         checkBounds(index);
@@ -176,6 +241,9 @@ public class CustomLinkedList<T> implements List<T> {
         return prevValue;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void add(int index, T element) {
         checkBounds(index);
@@ -188,6 +256,9 @@ public class CustomLinkedList<T> implements List<T> {
         size++;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public T remove(int index) {
 
@@ -201,12 +272,9 @@ public class CustomLinkedList<T> implements List<T> {
         return value;
     }
 
-    private void checkBounds(int index) {
-        if (index < 0 || index >= size) {
-            throw new IndexOutOfBoundsException();
-        }
-    }
-
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public int indexOf(Object o) {
         for (int i = 0; i < size; i++) {
@@ -218,6 +286,9 @@ public class CustomLinkedList<T> implements List<T> {
         return -1;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public int lastIndexOf(Object o) {
         int lastIndex = - 1;
@@ -231,29 +302,28 @@ public class CustomLinkedList<T> implements List<T> {
         return lastIndex;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public ListIterator<T> listIterator() {
-        return null;
+        return new ListIter();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public ListIterator<T> listIterator(int index) {
         return null;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<T> subList(int fromIndex, int toIndex) {
         return null;
-    }
-
-    private Node<T> getNodeByIndex(int index) {
-
-        Node<T> current = head;
-
-        for (int i = 0; i <= index; i++) {
-            current = current.next;
-        }
-        return current;
     }
 
     @Override
@@ -282,6 +352,8 @@ public class CustomLinkedList<T> implements List<T> {
         return hashCode;
     }
 
+    // ---------- Auxiliary methods ----------
+
     private class Node<T> {
 
         private Node<T> next;
@@ -297,7 +369,7 @@ public class CustomLinkedList<T> implements List<T> {
 
     }
 
-    final class LListIterator implements Iterator<T> {
+    final class CommonIterator implements Iterator<T> {
 
         int current = -1;
         int next = 0;
@@ -328,6 +400,70 @@ public class CustomLinkedList<T> implements List<T> {
             CustomLinkedList.this.remove(current);
             current = -1;
             next--;
+        }
+    }
+
+    final class ListIter implements ListIterator<T> {
+
+        @Override
+        public boolean hasNext() {
+            return false;
+        }
+
+        @Override
+        public T next() {
+            return null;
+        }
+
+        @Override
+        public boolean hasPrevious() {
+            return false;
+        }
+
+        @Override
+        public T previous() {
+            return null;
+        }
+
+        @Override
+        public int nextIndex() {
+            return 0;
+        }
+
+        @Override
+        public int previousIndex() {
+            return 0;
+        }
+
+        @Override
+        public void remove() {
+
+        }
+
+        @Override
+        public void set(T t) {
+
+        }
+
+        @Override
+        public void add(T t) {
+
+        }
+    }
+
+    private Node<T> getNodeByIndex(int index) {
+
+        Node<T> current = head;
+
+        for (int i = 0; i <= index; i++) {
+            current = current.next;
+        }
+        return current;
+    }
+
+    private void checkBounds(int index) {
+        if (index < 0 || index >= size) {
+            throw new IndexOutOfBoundsException();
         }
     }
 

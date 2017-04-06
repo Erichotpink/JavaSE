@@ -48,8 +48,26 @@ public class CustomArrayList<T> implements List<T> {
     }
 
     @Override
-    public <T1> T1[] toArray(T1[] a) {
-        return null;
+    public <T> T[] toArray(T[] a) {
+        Objects.requireNonNull(a);
+
+        if (a.length < size) {
+            a = Arrays.copyOf(a, size);
+        }
+
+        Iterator<T> it = (Iterator<T>) iterator();
+        int i = 0;
+
+        while (it.hasNext()) {
+            a[i] = it.next();
+            i++;
+        }
+
+        if (a.length > size) {
+            a[size] = null;
+        }
+
+        return a;
     }
 
     @Override
