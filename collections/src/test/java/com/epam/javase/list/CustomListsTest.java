@@ -511,4 +511,22 @@ public class CustomListsTest {
 
         assertThat(list.indexOf(null), is (1));
     }
+
+    @Test
+    public void testIfLastIndexOfWorksAsAspected() {
+        list.add(null);
+        list.add(null);
+        list.add(null);
+        list.add(null);
+        list.add(null);
+
+        list.add("aaa");
+        list.add("aaa");
+        list.add("aaa");
+        list.add("aaa");
+        list.add("aaa");
+
+        assertThat(list.lastIndexOf(null), is(4));
+        assertThat(list.lastIndexOf("aaa"), is(9));
+    }
 }

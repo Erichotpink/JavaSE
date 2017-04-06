@@ -210,7 +210,7 @@ public class CustomLinkedList<T> implements List<T> {
     @Override
     public int indexOf(Object o) {
         for (int i = 0; i < size; i++) {
-            if ((get(i) == null && o == null) || get(i).equals(o)) {
+            if ((get(i) == null && o == null) || (get(i) != null && get(i).equals(o))) {
                 return i;
             }
         }
@@ -220,7 +220,15 @@ public class CustomLinkedList<T> implements List<T> {
 
     @Override
     public int lastIndexOf(Object o) {
-        return 0;
+        int lastIndex = - 1;
+
+        for (int i = 0; i < size; i++) {
+            if ((get(i) == null && o == null) || (get(i) != null && get(i).equals(o))) {
+                lastIndex = i;
+            }
+        }
+
+        return lastIndex;
     }
 
     @Override

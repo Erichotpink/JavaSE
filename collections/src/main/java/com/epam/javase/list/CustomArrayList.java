@@ -196,7 +196,7 @@ public class CustomArrayList<T> implements List<T> {
     @Override
     public int indexOf(Object o) {
         for (int i = 0; i < size; i++) {
-            if ((data[i] == null && o == null) || data[i].equals(o)) {
+            if ((data[i] == null && o == null) || (data[i] != null && data[i].equals(o))) {
                 return i;
             }
         }
@@ -206,7 +206,15 @@ public class CustomArrayList<T> implements List<T> {
 
     @Override
     public int lastIndexOf(Object o) {
-        return 0;
+        int lastIndex = -1;
+
+        for (int i = 0; i < size; i++) {
+            if ((data[i] == null && o == null) || (data[i] != null && data[i].equals(o))) {
+                lastIndex = i;
+            }
+        }
+
+        return lastIndex;
     }
 
     @Override
