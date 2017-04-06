@@ -178,7 +178,14 @@ public class CustomLinkedList<T> implements List<T> {
 
     @Override
     public void add(int index, T element) {
+        checkBounds(index);
 
+        Node<T> prev = getNodeByIndex(index - 1);
+        Node<T> next = new Node<>(element);
+
+        next.next = prev.next;
+        prev.next = next;
+        size++;
     }
 
     @Override

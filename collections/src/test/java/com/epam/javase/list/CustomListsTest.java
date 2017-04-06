@@ -443,4 +443,48 @@ public class CustomListsTest {
 
         assertThat(list.set(2, null), equalTo(values[2]));
     }
+
+    @Test
+    public void testIfSetByIndexDoesntChangeListSize() {
+        list.addAll(Arrays.asList(values));
+
+        int size = list.size();
+
+        list.set(2, "aaa");
+
+        assertThat(list.size(), is(size));
+    }
+
+    @Test
+    public void testIfAddByIndexTrulyAddNewValue() {
+        list.addAll(Arrays.asList(values));
+
+        list.set(0, "aaa");
+        assertThat(list.get(0), equalTo("aaa"));
+    }
+
+    @Test
+    public void testIfWeCanAddNullByADdByIndex() {
+        list.addAll(Arrays.asList(values));
+        int index = values.length - 1;
+
+        list.add(index, null);
+        assertThat(list.get(index), nullValue());
+    }
+
+    @Test(expected = IndexOutOfBoundsException.class)
+    public void testIfAddByIndexCheckIndexBounds() {
+        list.add(1000, "aaa");
+    }
+
+    @Test
+    public void testIfAddByIndexChangeListSize() {
+        list.addAll(Arrays.asList(values));
+
+        int size = list.size();
+
+        list.add(2, "aaa");
+
+        assertThat(list.size(), is(size + 1));
+    }
 }

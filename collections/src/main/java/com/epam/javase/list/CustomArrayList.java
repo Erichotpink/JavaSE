@@ -171,6 +171,14 @@ public class CustomArrayList<T> implements List<T> {
     @Override
     public void add(int index, T element) {
 
+        checkBounds(index);
+
+        data = Arrays.copyOf(data, data.length + 1);
+        System.arraycopy(data, index, data, index + 1, data.length - index - 1 );
+
+        data[index] = element;
+
+        size++;
     }
 
     @Override
