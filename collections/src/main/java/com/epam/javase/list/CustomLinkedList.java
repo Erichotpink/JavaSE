@@ -159,6 +159,8 @@ public class CustomLinkedList<T> implements List<T> {
 
     @Override
     public T get(int index) {
+        checkBounds(index);
+
         return getNodeByIndex(index).value;
     }
 
@@ -175,11 +177,20 @@ public class CustomLinkedList<T> implements List<T> {
     @Override
     public T remove(int index) {
 
+        checkBounds(index);
+
         Node<T> prev = getNodeByIndex(index - 1);
+
         size--;
         T value = prev.next.value;
         prev.next = prev.next.next;
         return value;
+    }
+
+    private void checkBounds(int index) {
+        if (index < 0 || index >= size) {
+            throw new IndexOutOfBoundsException();
+        }
     }
 
     @Override
@@ -209,11 +220,8 @@ public class CustomLinkedList<T> implements List<T> {
 
     private Node<T> getNodeByIndex(int index) {
 
-        if (index < -1 || index >= size) {
-            throw new IndexOutOfBoundsException();
-        }
-
         Node<T> current = head;
+
         for (int i = 0; i <= index; i++) {
             current = current.next;
         }

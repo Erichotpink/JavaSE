@@ -405,4 +405,13 @@ public class CustomListsTest {
 
         assertFalse(list.equals(that));
     }
+
+    @Test
+    public void testBoundaryElementsByGetByIndexMethod() {
+        int last = values.length - 1;
+        list.addAll(Arrays.asList(values));
+
+        assertThat(list.get(0), equalTo(values[0]));
+        assertThat(list.get(last), equalTo(values[last]));
+    }
 }
