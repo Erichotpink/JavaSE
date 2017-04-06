@@ -134,7 +134,19 @@ public class CustomLinkedList<T> implements List<T> {
 
     @Override
     public boolean retainAll(Collection<?> c) {
-        return false;
+        Objects.requireNonNull(c);
+
+        boolean isModified = false;
+
+        Iterator it = iterator();
+        while(it.hasNext()) {
+            if (!c.contains(it.next())) {
+                it.remove();
+                isModified = true;
+            }
+        }
+
+        return isModified;
     }
 
     @Override

@@ -375,4 +375,16 @@ public class CustomListsTest {
 
         assertTrue(list.isEmpty());
     }
+
+    @Test
+    public void testIfRetainAllRemoveAllNonSharedElements() {
+        String[] init = {"aaa", "aaa", "bbb", "ccc", "ddd", "ddd"};
+        String[] retain = {"bbb", "ddd"};
+
+        list.addAll(Arrays.asList(init));
+        list.retainAll(Arrays.asList(retain));
+
+        assertThat(list.size(), is(retain.length + 1));
+        assertTrue(list.containsAll(Arrays.asList(retain)));
+    }
 }
