@@ -39,7 +39,7 @@ public class CustomArrayList<T> implements List<T> {
 
     @Override
     public Iterator<T> iterator() {
-        return new AListIterator();
+        return new CommonIterator();
     }
 
     @Override
@@ -276,7 +276,7 @@ public class CustomArrayList<T> implements List<T> {
         return hashCode;
     }
 
-    final class AListIterator implements Iterator<T> {
+    final class CommonIterator implements Iterator<T> {
 
         int current = -1;
         int next = 0;
@@ -307,6 +307,94 @@ public class CustomArrayList<T> implements List<T> {
             CustomArrayList.this.remove(current);
             current = -1;
             next--;
+        }
+    }
+
+    final class ListIter implements ListIterator<T> {
+
+        private int cursorPos;
+        private int last;
+
+        public ListIter(int startIndex) {
+            cursorPos = startIndex;
+            last = -1;
+        }
+
+        @Override
+        public boolean hasNext() {
+            return cursorPos < size;
+        }
+
+        @Override
+        public T next() {
+            if (!hasNext()) {
+                throw new NoSuchElementException();
+            }
+
+            last = cursorPos;
+            T value = (T) data[cursorPos];
+            ++cursorPos;
+
+            return value;
+        }
+
+        @Override
+        public boolean hasPrevious() {
+            return cursorPos > 0;
+        }
+
+        @Override
+        public T previous() {
+            if (!hasPrevious()) {
+                throw new NoSuchElementException();
+            }
+
+            T value = (T) data[--cursorPos];
+            last = cursorPos;
+
+            return value;
+        }
+
+        @Override
+        public int nextIndex() {
+            return cursorPos;
+        }
+
+        @Override
+        public int previousIndex() {
+            return cursorPos - 1;
+        }
+
+        @Override
+        public void remove() {
+            if (last < 0) {
+                throw new IllegalStateException();
+            }
+
+            CustomArrayList.this.remove(last);
+            cursorPos = last;
+            last = -1;
+        }
+
+        @Override
+        public void set(T t) {
+            if (last < 0) {
+                throw new IllegalStateException();
+            }
+
+            CustomArrayList.this.set(last, t);
+        }
+
+        @Override
+        public void add(T t) {
+            if (isEmpty()) {
+                CustomArrayList.this.add(t);
+            } else {
+                CustomArrayList.this.add(cursorPos, t);
+            }
+
+            last = -1;
+            cursorPos++;
         }
     }
 }
