@@ -550,4 +550,34 @@ public class CustomListsTest {
 
         assertThat(arr[list.size()], nullValue());
     }
+
+    @Test
+    public void testIfSublistReturnEmptyList() {
+        list.addAll(Arrays.asList(values));
+        List<String> temp = list.subList(0, 0);
+
+        assertTrue(temp.isEmpty());
+    }
+
+    @Test
+    public void testIfSublistWorksAsExpected() {
+        list.addAll(Arrays.asList(values));
+        List<String> temp = list.subList(0, 2);
+
+        assertThat(temp.get(0), is(list.get(0)));
+        assertThat(temp.get(1), is(list.get(1)));
+        assertThat(temp.size(), is(2));
+    }
+
+    @Test(expected = IndexOutOfBoundsException.class)
+    public void testIfSublistThrowExceptionOnWrongFromIndex() {
+        list.addAll(Arrays.asList(values));
+        List<String> temp = list.subList(-1, 2);
+    }
+
+    @Test(expected = IndexOutOfBoundsException.class)
+    public void testIfSublistThrowExceptionOnWrongToIndex() {
+        list.addAll(Arrays.asList(values));
+        List<String> temp = list.subList(0, 25);
+    }
 }

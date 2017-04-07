@@ -237,17 +237,36 @@ public class CustomArrayList<T> implements List<T> {
 
     @Override
     public ListIterator<T> listIterator() {
-        return null;
+        return new ListIter(0);
     }
 
     @Override
     public ListIterator<T> listIterator(int index) {
-        return null;
+        return new ListIter(index);
     }
 
-    @Override
+    /**
+     * This is a light implementation and it doesn't follow the list {@link List} interface contract.
+     * This method return a new list containing elements according to the specified range.
+     *
+     * @param fromIndex low endpoint (inclusive) of the subList
+     * @param toIndex high endpoint (exclusive) of the subList
+     * @return a view of the specified range within this list
+     * @throws IndexOutOfBoundsException for an illegal endpoint index value
+     *         (<tt>fromIndex &lt; 0 || toIndex &gt; size ||
+     *         fromIndex &gt; toIndex</tt>)
+     */
     public List<T> subList(int fromIndex, int toIndex) {
-        return null;
+        checkBounds(fromIndex);
+        checkBounds(toIndex);
+
+        List<T> list = new LinkedList<T>();
+        ListIterator<T> it = listIterator(fromIndex);
+        while(it.nextIndex() < toIndex) {
+            list.add(it.next());
+        }
+
+        return list;
     }
 
     @Override

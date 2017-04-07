@@ -321,11 +321,31 @@ public class CustomLinkedList<T> implements List<T> {
     }
 
     /**
-     * {@inheritDoc}
+     * This is a light implementation and it doesn't follow the list {@link List} interface contract.
+     * This method return a new list containing elements according to the specified range.
+     *
+     * @param fromIndex low endpoint (inclusive) of the subList
+     * @param toIndex high endpoint (exclusive) of the subList
+     * @return a view of the specified range within this list
+     * @throws IndexOutOfBoundsException for an illegal endpoint index value
+     *         (<tt>fromIndex &lt; 0 || toIndex &gt; size ||
+     *         fromIndex &gt; toIndex</tt>)
      */
     @Override
     public List<T> subList(int fromIndex, int toIndex) {
-        return null;
+
+        if (!isEmpty()) {
+            checkBounds(fromIndex);
+            checkBounds(toIndex);
+        }
+
+        List<T> list = new LinkedList<T>();
+        ListIterator<T> it = listIterator(fromIndex);
+        while(it.nextIndex() < toIndex) {
+            list.add(it.next());
+        }
+
+        return list;
     }
 
     @Override
