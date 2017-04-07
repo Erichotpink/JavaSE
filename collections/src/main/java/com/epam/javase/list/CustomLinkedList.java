@@ -307,7 +307,7 @@ public class CustomLinkedList<T> implements List<T> {
      */
     @Override
     public ListIterator<T> listIterator() {
-        return new ListIter();
+        return new ListIter(0);
     }
 
     /**
@@ -315,7 +315,9 @@ public class CustomLinkedList<T> implements List<T> {
      */
     @Override
     public ListIterator<T> listIterator(int index) {
-        return null;
+        checkBounds(index);
+
+        return new ListIter(index);
     }
 
     /**
@@ -405,49 +407,89 @@ public class CustomLinkedList<T> implements List<T> {
 
     final class ListIter implements ListIterator<T> {
 
+        private int cursorPos;
+        private int last;
+
+        public ListIter(int startIndex) {
+            cursorPos = startIndex;
+            last = -1;
+        }
+
         @Override
         public boolean hasNext() {
-            return false;
+            return cursorPos < size;
         }
 
         @Override
         public T next() {
-            return null;
+            if (!hasNext()) {
+                throw new NoSuchElementException();
+            }
+
+            last = cursorPos;
+            Node<T> node = getNodeByIndex(cursorPos);
+            ++cursorPos;
+
+            return node.value;
         }
 
         @Override
         public boolean hasPrevious() {
-            return false;
+            return cursorPos > 0;
         }
 
         @Override
         public T previous() {
-            return null;
+            if (!hasPrevious()) {
+                throw new NoSuchElementException();
+            }
+
+            Node<T> node = getNodeByIndex(--cursorPos);
+            last = cursorPos;
+
+            return node.value;
         }
 
         @Override
         public int nextIndex() {
-            return 0;
+            return cursorPos;
         }
 
         @Override
         public int previousIndex() {
-            return 0;
+            return cursorPos - 1;
         }
 
         @Override
         public void remove() {
+            if (last < 0) {
+                throw new IllegalStateException();
+            }
 
+            CustomLinkedList.this.remove(last);
+            cursorPos = last;
+            last = -1;
         }
 
         @Override
         public void set(T t) {
+            if (last < 0) {
+                throw new IllegalStateException();
+            }
 
-        }
+            CustomLinkedList.this.set(last, t);
+         }
 
         @Override
         public void add(T t) {
+            if (isEmpty()) {
+                CustomLinkedList.this.add(t);
+            } else {
+                CustomLinkedList.this.add(cursorPos, t);
+            }
 
+            last = -1;
+            cursorPos++;
         }
     }
 
@@ -465,19 +507,5 @@ public class CustomLinkedList<T> implements List<T> {
         if (index < 0 || index >= size) {
             throw new IndexOutOfBoundsException();
         }
-    }
-
-    public static void main(String[] args) {
-        List<String> list = new CustomLinkedList<>();
-        list.add("a");
-        list.add("b");
-        list.add("c");
-
-        Iterator<String> it = list.iterator();
-        while (it.hasNext()) {
-            System.out.println(it.next());
-            it.remove();
-        }
-        System.out.println("Size: " + list.size());
     }
 }
