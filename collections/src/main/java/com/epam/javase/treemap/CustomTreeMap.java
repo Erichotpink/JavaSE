@@ -29,7 +29,6 @@ public class CustomTreeMap<K extends Comparable<K>, V> implements Map<K, V> {
         Objects.requireNonNull(key);
 
         if (root == null) return false;
-        root.key.compareTo((K) key);
         return find(root, (K) key) != null;
     }
 

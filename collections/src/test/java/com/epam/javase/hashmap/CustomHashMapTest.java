@@ -26,7 +26,7 @@ public class CustomHashMapTest {
     private Set<Map.Entry<Integer, String>> entrySet;
     private Collection<String> valueSet;
     private final Integer key = new Integer(1000);
-    private final String value = "abc";;
+    private final String value = "abc";
     private final Integer[] values = { new Integer(100),
                                        new Integer(222),
                                        new Integer(3123),

@@ -5,6 +5,7 @@ import static org.junit.Assert.*;
 
 import org.junit.Before;
 import org.junit.FixMethodOrder;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.Map;
@@ -25,6 +26,8 @@ import static org.junit.Assert.assertTrue;
 public class CustomTreeMapTest {
 
     private Map<Integer, String> m;
+    private final Integer key = new Integer(1000);
+    private final String value = "abc";
 
     @Before
     public void init() {
@@ -94,6 +97,20 @@ public class CustomTreeMapTest {
         m.containsKey(null);
     }
 
+    @Test
+    public void testIfContainsKeyMethodReturnTrueOnSuccess() {
+        m.put(10, "abc");
+
+        assertTrue(m.containsKey(10));
+    }
+
+    @Test
+    public void testIfContainsKeyMethodReturnFalseOnFailure() {
+        m.put(10, "abc");
+
+        assertFalse(m.containsKey(11));
+    }
+
     @Test(expected = ClassCastException.class)
     public void testThatContainsKeyMethodThrowsExceptionOnWrongKeyClass() {
         m.put(1, ""); //TODO need to remove
@@ -101,20 +118,14 @@ public class CustomTreeMapTest {
     }
 
     @Test
-    public void testContainsValueMethodWorksProperlyOn() {
-        String value = "aaaa";
+    public void testContainsValueMethodWorksProperlyOnNullInputValue() {
+        m.put(key, null);
 
-        m.put(1, value);
-
-        assertTrue(m.containsValue(value));
+        assertTrue(m.containsValue(null));
     }
 
     @Test
-    public void testContainsValueMethodWorksProperlyOnNullInputValue() {
-        String value = "aaaa";
-
-        m.put(1, value);
-
+    public void testEmptyTreeDoesntContainNullValue() {
         assertFalse(m.containsValue(null));
     }
 
@@ -129,8 +140,32 @@ public class CustomTreeMapTest {
         );
     }
 
+    @Ignore
     @Test(expected = ClassCastException.class)
     public void testValueContainsMethodThrowsExceptionOnWrongInputValueClass() {
+    }
+
+    @Test
+    public void testContainsValueMethodWorksProperly() {
+        m.put(key, value);
+        assertTrue(m.containsValue(value));
+    }
+
+    @Test
+    public void testContainsValueMethodReturnFalseOnFailure() {
+        m.put(key, "abc");
+        assertFalse(m.containsValue("cba"));
+    }
+
+    @Test
+    public void testContainsMethodAfterBulkInsertion() {
+        for (int i = 0; i < 1000; i++) {
+            m.put(new Integer(i), null);
+        }
+
+        for (int i = 0; i < 1000; i++) {
+            assertTrue(m.containsKey(new Integer(i)));
+        }
     }
 
     @Test
