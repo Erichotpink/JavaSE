@@ -1,9 +1,6 @@
 package com.epam.javase.treemap;
 
-import java.util.Collection;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Created by aivanov on 3/24/2017.
@@ -54,9 +51,19 @@ public class CustomTreeMap<K extends Comparable<K>, V> implements Map<K, V> {
     @Override
     public V put(K key, V value) {
         Objects.requireNonNull(key);
-        root = put(root, key, value);
 
-        return value;
+        Node<K, V> current = find(root, key);
+        V oldValue = null;
+
+        if (Objects.nonNull(current)) {
+            oldValue = current.value;
+            current.value = value;
+        } else {
+            root = put(root, key, value);
+            size++;
+        }
+
+        return oldValue;
     }
 
     private Node<K, V> put(Node<K, V> node, K key, V value) {

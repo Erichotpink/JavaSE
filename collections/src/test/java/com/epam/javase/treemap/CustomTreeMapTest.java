@@ -60,8 +60,8 @@ public class CustomTreeMapTest {
 
     @Test
     public void testThatWeCanPutKeyValuePairAndCanCheckIt() {
-        m.put(new Integer(3), "abc");
-        assertThat(m.containsKey(3), is(true));
+        m.put(key, value);
+        assertThat(m.containsKey(key), is(true));
     }
 
     @Test(expected = NullPointerException.class)
@@ -71,8 +71,8 @@ public class CustomTreeMapTest {
 
     @Test
     public void testThatWeCanPutNullValue() {
-        m.put(1, null);
-        assertThat(m.containsKey(1), is(true));
+        m.put(key, null);
+        assertThat(m.containsKey(key), is(true));
     }
 
     @Test
@@ -93,10 +93,23 @@ public class CustomTreeMapTest {
         String oldValue = "aaaa";
         String newValue = "bbbb";
 
-        m.put(1, oldValue);
-        String returnedValue = m.put(1, newValue);
+        m.put(key, oldValue);
 
-        assertThat(oldValue, is(equalTo(returnedValue)));
+        assertThat(m.put(key, newValue), equalTo(oldValue));
+    }
+
+    @Test
+    public void testThatPutValueIncreaseSizeWhenKeyDoesntPresent() {
+        m.put(key, value);
+        assertThat(m.size(), is(1));
+    }
+
+    @Test
+    public void testThatPutValueDontIncreaseSizeWhenKeyPresent() {
+        m.put(key, value);
+        m.put(key, "bbnn");
+
+        assertThat(m.size(), is(1));
     }
 
     @Test(expected = NullPointerException.class)
