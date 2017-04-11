@@ -8,6 +8,7 @@ import org.junit.FixMethodOrder;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import java.util.Date;
 import java.util.Map;
 import java.util.stream.IntStream;
 
@@ -44,6 +45,12 @@ public class CustomTreeMapTest {
     @Test
     public void testThatNewMapIsEmpty() {
         assertThat(m.isEmpty(), is(true));
+    }
+
+    @Test
+    public void testThatNonEmptyMapIsntEmpty() {
+        m.put(key, value);
+        assertFalse(m.isEmpty());
     }
 
     @Test
@@ -180,6 +187,38 @@ public class CustomTreeMapTest {
         assertTrue(m.isEmpty());
         assertFalse(m.containsKey(1));
     }
+
+    @Test(expected = NullPointerException.class)
+    public void testIfGetThrowsExceptionIfKeyIsNull() {
+        m.get(null);
+    }
+
+    @Test(expected = ClassCastException.class)
+    public void testIfGetThrowsExceptionIfWeSpecifyWrongKeyClass() {
+        m.get(new Thread());
+    }
+
+    @Test
+    public void testIfGetReturnNullIfTheKeyWasntFound() {
+
+        assertNull(m.get(key));
+    }
+
+
+    @Test
+    public void testIfGetReturnExpectedValueWhenMapContainsKey() {
+        m.put(key, value);
+
+        assertThat(m.get(key), is(value));
+    }
+
+    @Test
+    public void testIfGetReturnNullWhenMapContainsKeyAndValueEqualsNull() {
+        m.put(key, null);
+
+        assertNull(m.get(key));
+    }
+
 
 
 }

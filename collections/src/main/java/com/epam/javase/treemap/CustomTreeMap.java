@@ -21,7 +21,7 @@ public class CustomTreeMap<K extends Comparable<K>, V> implements Map<K, V> {
 
     @Override
     public boolean isEmpty() {
-        return true;
+        return size == 0;
     }
 
     @Override
@@ -44,13 +44,18 @@ public class CustomTreeMap<K extends Comparable<K>, V> implements Map<K, V> {
 
     @Override
     public V get(Object key) {
-        return null;
+        Objects.requireNonNull(key);
+
+        Node<K, V> node = find(root, (K) key);
+
+        return node == null ? null : node.value;
     }
 
     @Override
     public V put(K key, V value) {
         Objects.requireNonNull(key);
         root = put(root, key, value);
+
         return value;
     }
 
