@@ -137,5 +137,14 @@ public class CustomTreeMapTest {
     public void testThatMapCalculateItsSizeProperly() {
     }
 
+    @Test
+    public void testIfClearWorksAsExpected() {
+        m.put(1, null);
+        m.clear();
+
+        assertTrue(m.isEmpty());
+        assertFalse(m.containsKey(1));
+    }
+
 
 }

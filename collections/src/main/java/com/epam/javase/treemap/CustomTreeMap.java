@@ -12,10 +12,11 @@ import java.util.Set;
 public class CustomTreeMap<K extends Comparable<K>, V> implements Map<K, V> {
 
     private Node<K, V> root;
+    private int size = 0;
 
     @Override
     public int size() {
-        return 0;
+        return size;
     }
 
     @Override
@@ -93,7 +94,8 @@ public class CustomTreeMap<K extends Comparable<K>, V> implements Map<K, V> {
 
     @Override
     public void clear() {
-
+        root = null;
+        size = 0;
     }
 
     @Override
@@ -123,5 +125,4 @@ public class CustomTreeMap<K extends Comparable<K>, V> implements Map<K, V> {
         }
 
     }
-
 }
