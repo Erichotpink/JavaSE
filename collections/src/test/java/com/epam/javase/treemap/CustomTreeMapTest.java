@@ -9,6 +9,7 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.IntStream;
 
@@ -230,6 +231,24 @@ public class CustomTreeMapTest {
         m.put(key, null);
 
         assertNull(m.get(key));
+    }
+
+    @Test (expected = NullPointerException.class)
+    public void testIfPutAllThrowsExceptionOnNullArgument() {
+        m.putAll(null);
+    }
+
+    @Test
+    public void testIfPutAllTrulyPutElementsToTheMap() {
+        HashMap<Integer, String> that = new HashMap<>();
+        m.put(10, "abc");
+        that.put(10, "test1");
+        that.put(1598, "test2");
+        m.putAll(that);
+
+        assertTrue(m.containsValue("test1"));
+        assertTrue(m.containsKey(1598));
+        assertTrue(m.size() == 2);
     }
 
 
