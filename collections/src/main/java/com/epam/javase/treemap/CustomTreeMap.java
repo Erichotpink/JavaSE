@@ -11,16 +11,25 @@ public class CustomTreeMap<K extends Comparable<K>, V> implements Map<K, V> {
     private Node<K, V> root;
     private int size = 0;
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public int size() {
         return size;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean isEmpty() {
         return size == 0;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean containsKey(Object key) {
         Objects.requireNonNull(key);
@@ -29,6 +38,9 @@ public class CustomTreeMap<K extends Comparable<K>, V> implements Map<K, V> {
         return find(root, (K) key) != null;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean containsValue(Object o) {
 
@@ -36,6 +48,107 @@ public class CustomTreeMap<K extends Comparable<K>, V> implements Map<K, V> {
 
         return findNodeByValue(root, value);
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public V get(Object key) {
+        Objects.requireNonNull(key);
+
+        Node<K, V> node = find(root, (K) key);
+
+        return node == null ? null : node.value;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public V put(K key, V value) {
+        Objects.requireNonNull(key);
+
+        Node<K, V> current = find(root, key);
+        V oldValue = null;
+
+        if (Objects.nonNull(current)) {
+            oldValue = current.value;
+            current.value = value;
+        } else {
+            root = put(root, key, value);
+            size++;
+        }
+
+        return oldValue;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public V remove(Object key) {
+        Objects.requireNonNull(key);
+
+        Node<K, V>[] value = new Node[1];
+        root = remove(root, (K) key, value);
+
+        if (Objects.nonNull(value[0])) {
+            size--;
+            return value[0].value;
+        }
+
+        return null;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void putAll(Map<? extends K, ? extends V> m) {
+        Objects.requireNonNull(m);
+
+        for (Entry<? extends K, ? extends V> entry : m.entrySet()) {
+            put(entry.getKey(), entry.getValue());
+        }
+
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void clear() {
+        root = null;
+        size = 0;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Set<K> keySet() {
+        return null;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Collection<V> values() {
+        return null;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Set<Entry<K, V>> entrySet() {
+        return null;
+    }
+
+    // ---------------------------------------------------
+    // ---------- Private and auxiliary methods ----------
+    // ---------------------------------------------------
 
     private boolean findNodeByValue(Node<K, V> node, V value) {
 
@@ -53,33 +166,6 @@ public class CustomTreeMap<K extends Comparable<K>, V> implements Map<K, V> {
         }
 
         return false;
-    }
-
-    @Override
-    public V get(Object key) {
-        Objects.requireNonNull(key);
-
-        Node<K, V> node = find(root, (K) key);
-
-        return node == null ? null : node.value;
-    }
-
-    @Override
-    public V put(K key, V value) {
-        Objects.requireNonNull(key);
-
-        Node<K, V> current = find(root, key);
-        V oldValue = null;
-
-        if (Objects.nonNull(current)) {
-            oldValue = current.value;
-            current.value = value;
-        } else {
-            root = put(root, key, value);
-            size++;
-        }
-
-        return oldValue;
     }
 
     private Node<K, V> put(Node<K, V> node, K key, V value) {
@@ -107,21 +193,6 @@ public class CustomTreeMap<K extends Comparable<K>, V> implements Map<K, V> {
         } else {
             return find(node.right, key);
         }
-    }
-
-    @Override
-    public V remove(Object key) {
-        Objects.requireNonNull(key);
-
-        Node<K, V>[] value = new Node[1];
-        root = remove(root, (K) key, value);
-
-        if (Objects.nonNull(value[0])) {
-            size--;
-            return value[0].value;
-        }
-
-        return null;
     }
 
     private Node<K, V> remove(Node<K, V> current, K key, Node<K, V>[] value) {
@@ -169,37 +240,6 @@ public class CustomTreeMap<K extends Comparable<K>, V> implements Map<K, V> {
         }
 
         return node;
-    }
-
-    @Override
-    public void putAll(Map<? extends K, ? extends V> m) {
-        Objects.requireNonNull(m);
-
-        for (Entry<? extends K, ? extends V> entry : m.entrySet()) {
-            put(entry.getKey(), entry.getValue());
-        }
-
-    }
-
-    @Override
-    public void clear() {
-        root = null;
-        size = 0;
-    }
-
-    @Override
-    public Set<K> keySet() {
-        return null;
-    }
-
-    @Override
-    public Collection<V> values() {
-        return null;
-    }
-
-    @Override
-    public Set<Entry<K, V>> entrySet() {
-        return null;
     }
 
     private class Node<K extends Comparable<K>, V> {
