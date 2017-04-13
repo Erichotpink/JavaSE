@@ -10,6 +10,7 @@ import org.junit.Test;
 
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.stream.IntStream;
 
@@ -30,6 +31,7 @@ public class CustomTreeMapTest {
     private Map<Integer, String> m;
     private final Integer key = new Integer(1000);
     private final String value = "abc";
+    private final Integer[] values = {20, 18, 16, 14, 12};
 
     @Before
     public void init() {
@@ -161,11 +163,6 @@ public class CustomTreeMapTest {
         );
     }
 
-    @Ignore
-    @Test(expected = ClassCastException.class)
-    public void testValueContainsMethodThrowsExceptionOnWrongInputValueClass() {
-    }
-
     @Test
     public void testContainsValueMethodWorksProperly() {
         m.put(1, "aaa");
@@ -292,5 +289,49 @@ public class CustomTreeMapTest {
 
         assertNull(m.remove(111));
         assertThat(m.size(), is(size));
+    }
+
+    @Test
+    public void testIfKeySetIteratorRemoveMethodTrulyRemoveElementFromMap() {
+
+        for (Integer i : values) {
+            m.put(i, null);
+        }
+
+        Iterator<Integer> iterator = m.keySet().iterator();
+        while (iterator.hasNext()) {
+            iterator.next();
+            iterator.remove();
+        }
+        assertTrue(m.isEmpty());
+    }
+
+    @Test
+    public void testIfEntrySetIteratorRemoveMethodTrulyRemoveElementFromMap() {
+
+        for (Integer i : values) {
+            m.put(i, null);
+        }
+
+        Iterator<Map.Entry<Integer, String>> iterator = m.entrySet().iterator();
+        while (iterator.hasNext()) {
+            iterator.next();
+            iterator.remove();
+        }
+        assertTrue(m.isEmpty());
+    }
+
+    @Test
+    public void testIfValueSetIteratorRemoveMethodTrulyRemoveElementFromMap() {
+
+        m.put(100, "abc");
+        m.put(200, "cba");
+
+
+        Iterator<String> it = m.values().iterator();
+        it.next();
+        it.remove();
+
+        assertThat(m.size(), is(1));
     }
 }

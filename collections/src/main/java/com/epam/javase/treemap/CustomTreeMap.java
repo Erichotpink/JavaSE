@@ -35,6 +35,11 @@ public class CustomTreeMap<K extends Comparable<K>, V> implements Map<K, V> {
         Objects.requireNonNull(key);
 
         if (root == null) return false;
+
+        if (!key.getClass().equals(root.key.getClass())) {
+            throw new ClassCastException();
+        }
+
         return find(root, (K) key) != null;
     }
 
@@ -43,6 +48,8 @@ public class CustomTreeMap<K extends Comparable<K>, V> implements Map<K, V> {
      */
     @Override
     public boolean containsValue(Object o) {
+
+        if (root == null) return false;
 
         V value = (V) o;
 
@@ -127,7 +134,7 @@ public class CustomTreeMap<K extends Comparable<K>, V> implements Map<K, V> {
      */
     @Override
     public Set<K> keySet() {
-        return null;
+        return new CustomKeySet();
     }
 
     /**
@@ -135,7 +142,7 @@ public class CustomTreeMap<K extends Comparable<K>, V> implements Map<K, V> {
      */
     @Override
     public Collection<V> values() {
-        return null;
+        return new CustomValueSet();
     }
 
     /**
@@ -143,7 +150,7 @@ public class CustomTreeMap<K extends Comparable<K>, V> implements Map<K, V> {
      */
     @Override
     public Set<Entry<K, V>> entrySet() {
-        return null;
+        return new CustomEntrySet();
     }
 
     // ---------------------------------------------------
@@ -242,7 +249,7 @@ public class CustomTreeMap<K extends Comparable<K>, V> implements Map<K, V> {
         return node;
     }
 
-    private class Node<K extends Comparable<K>, V> {
+    private class Node<K extends Comparable<K>, V> implements Map.Entry<K, V> {
         private final K key;
         private V value;
         private Node<K, V> left;
@@ -253,5 +260,146 @@ public class CustomTreeMap<K extends Comparable<K>, V> implements Map<K, V> {
             this.value = value;
         }
 
+        @Override
+        public K getKey() {
+            return key;
+        }
+
+        @Override
+        public V getValue() {
+            return value;
+        }
+
+        @Override
+        public V setValue(V value) {
+            V oldValue = value;
+            this.value = value;
+
+            return oldValue;
+        }
+    }
+
+    final class CustomEntrySet extends AbstractSet<Entry<K, V>> {
+
+        @Override
+        public Iterator<Entry<K, V>> iterator() {
+            return new EntryIterator();
+        }
+
+        @Override
+        public int size() {
+            return CustomTreeMap.this.size();
+        }
+    }
+
+    final class CustomKeySet extends AbstractSet<K> {
+
+        @Override
+        public Iterator<K> iterator() {
+            return new KeyIterator();
+        }
+
+        @Override
+        public int size() {
+            return CustomTreeMap.this.size();
+        }
+    }
+
+    final class CustomValueSet extends AbstractSet<V> {
+
+        @Override
+        public Iterator<V> iterator() {
+            return new ValueIterator();
+        }
+
+        @Override
+        public int size() {
+            return CustomTreeMap.this.size();
+        }
+    }
+
+    abstract class CommonIterator {
+
+        Entry<K, V>[] data = new Entry[size];
+        int current;
+        int next;
+
+        public CommonIterator() {
+            traverseNodes(root, data, 0);
+
+            current = -1;
+            next = 0;
+        }
+
+        private int traverseNodes(Node<K, V> current, Entry<K, V>[] data, int index) {
+            if (current == null) {
+                return index;
+            }
+
+            index = traverseNodes(current.left, data, index);
+            data[index++] = current;
+            index = traverseNodes(current.right, data, index);
+
+            return index;
+        }
+
+        public boolean hasNext() {
+            return next < data.length;
+        }
+
+        public void remove() {
+            if (current < 0) {
+                throw new IllegalStateException();
+            }
+
+            CustomTreeMap.this.remove(data[current].getKey());
+            current = -1;
+        }
+
+    }
+
+    final class EntryIterator extends CommonIterator implements Iterator<Entry<K, V>> {
+
+        @Override
+        public Entry<K, V> next() {
+            if (!hasNext()) {
+                throw new NoSuchElementException();
+            }
+
+            current = next;
+            next++;
+
+            return data[current];
+        }
+    }
+
+    final class KeyIterator extends CommonIterator implements Iterator<K> {
+
+        @Override
+        public K next() {
+            if (!hasNext()) {
+                throw new NoSuchElementException();
+            }
+
+            current = next;
+            next++;
+
+            return data[current].getKey();
+        }
+    }
+
+    final class ValueIterator extends CommonIterator implements Iterator<V> {
+
+        @Override
+        public V next() {
+            if (!hasNext()) {
+                throw new NoSuchElementException();
+            }
+
+            current = next;
+            next++;
+
+            return data[current].getValue();
+        }
     }
 }
