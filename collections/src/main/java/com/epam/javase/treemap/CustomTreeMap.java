@@ -30,13 +30,29 @@ public class CustomTreeMap<K extends Comparable<K>, V> implements Map<K, V> {
     }
 
     @Override
-    public boolean containsValue(Object value) {
-        if (root == null) return false;
-        if (root.value == null) {
-            return value == null;
-        } else {
-            return root.value.equals(value);
+    public boolean containsValue(Object o) {
+
+        V value = (V) o;
+
+        return findNodeByValue(root, value);
+    }
+
+    private boolean findNodeByValue(Node<K, V> node, V value) {
+
+        if (Objects.isNull(node)) {
+            return false;
         }
+
+        if ((value == null && node.value == null) || (value != null && value.equals(node.value))) {
+            return true;
+        }
+
+        if (findNodeByValue(node.left, value) ||
+                findNodeByValue(node.right, value)) {
+            return true;
+        }
+
+        return false;
     }
 
     @Override
@@ -95,7 +111,64 @@ public class CustomTreeMap<K extends Comparable<K>, V> implements Map<K, V> {
 
     @Override
     public V remove(Object key) {
+        Objects.requireNonNull(key);
+
+        Node<K, V>[] value = new Node[1];
+        root = remove(root, (K) key, value);
+
+        if (Objects.nonNull(value[0])) {
+            size--;
+            return value[0].value;
+        }
+
         return null;
+    }
+
+    private Node<K, V> remove(Node<K, V> current, K key, Node<K, V>[] value) {
+        if (current == null) {
+            return null;
+        }
+
+        int compareResult = current.key.compareTo(key);
+
+        if (compareResult > 0) {
+            current.left = remove(current.left, key, value);
+        } else if (compareResult < 0) {
+            current.right = remove(current.right, key, value);
+        } else {
+            value[0] = current;
+            if (current.left == null) {
+                current = current.right;
+            } else if (current.right == null) {
+                current =  current.left;
+            } else {
+                Node<K, V> oldCurrent = current;
+                current = findMin(current.right);
+                current.right = removeMin(oldCurrent.right);
+                current.left = oldCurrent.left;
+            }
+        }
+
+        return current;
+    }
+
+    private Node<K, V> removeMin(Node<K, V> node) {
+        if (Objects.isNull(node.left)) {
+            return node.right;
+        }
+
+        node.left = removeMin(node.left);
+
+        return node;
+    }
+
+    private Node<K, V> findMin(Node<K, V> node) {
+
+        while (Objects.nonNull(node.left)) {
+            node = node.left;
+        }
+
+        return node;
     }
 
     @Override

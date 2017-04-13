@@ -168,14 +168,18 @@ public class CustomTreeMapTest {
 
     @Test
     public void testContainsValueMethodWorksProperly() {
-        m.put(key, value);
-        assertTrue(m.containsValue(value));
+        m.put(1, "aaa");
+        m.put(2, "bbb");
+        m.put(3, "ccc");
+        assertTrue(m.containsValue("ccc"));
     }
 
     @Test
     public void testContainsValueMethodReturnFalseOnFailure() {
-        m.put(key, "abc");
-        assertFalse(m.containsValue("cba"));
+        m.put(1, "aaa");
+        m.put(2, "bbb");
+        m.put(3, "ccc");
+        assertFalse(m.containsValue("ddd"));
     }
 
     @Test
@@ -251,6 +255,42 @@ public class CustomTreeMapTest {
         assertTrue(m.size() == 2);
     }
 
+    @Test(expected = NullPointerException.class)
+    public void testIfRemoveThrowsExceptionIfWeTryRemoveNullKey() {
+        m.remove(null);
+    }
 
+    @Test
+    public void testIfRemoveWorkAsExpected() {
+        m.put(10, "abc");
+        m.put(11, "test1");
+        m.put(1598, "test2");
+        int size = m.size();
 
+        assertThat(m.remove(11), equalTo("test1"));
+        assertThat(m.size(), is(size - 1));
+    }
+
+    @Test
+    public void testIfRemoveTrulyRemoveEntry() {
+        m.put(10, "abc");
+        m.put(11, "test1");
+        m.put(1598, "test2");
+
+        m.remove(11);
+        assertFalse(m.containsKey(11));
+        assertTrue(m.containsKey(10));
+        assertTrue(m.containsKey(1598));
+    }
+
+    @Test
+    public void testIfRemoveReturnNullOnFailureAndKeepsOldSize() {
+        m.put(10, "abc");
+        m.put(11, "test1");
+        m.put(1598, "test2");
+        int size = m.size();
+
+        assertNull(m.remove(111));
+        assertThat(m.size(), is(size));
+    }
 }
