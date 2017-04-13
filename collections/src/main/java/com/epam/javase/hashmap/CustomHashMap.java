@@ -392,7 +392,14 @@ public class CustomHashMap<K, V> implements Map<K, V> {
         @Override
         public boolean remove(Object key) {
             Objects.requireNonNull(key);
-            return CustomHashMap.this.removeEntryByKey(key) != null;
+
+            CustomEntry<K, V> entry = removeEntryByKey(key);
+            if (entry != null) {
+                size--;
+                return true;
+            }
+
+            return false;
         }
     }
 
